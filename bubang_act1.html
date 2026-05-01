@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BÚ-BĀNG 無望 — Act 1 Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0a0907;
+      --paper: #d8cdb8;
+      --paper-dim: #9a907d;
+      --blood: #6b1818;
+      --blood-bright: #a52828;
+      --silence: #4a5d52;
+      --will: #8a7d5e;
+      --vignette: 0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: "Noto Serif TC", "Songti TC", "PingFang TC", serif;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      background:
+        radial-gradient(ellipse at center, #1a1612 0%, #0a0907 70%, #000 100%);
+      position: relative;
+    }
+    /* Film grain + scan lines */
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.80  0 0 0 0 0.72  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: 200;
+      opacity: 0.4;
+    }
+    /* Vignette that gets darker with FEAR */
+    body::after {
+      content: "";
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse at center,
+        transparent 30%,
+        rgba(0,0,0,calc(0.4 + 0.5 * var(--vignette))) 75%,
+        rgba(0,0,0,calc(0.7 + 0.3 * var(--vignette))) 100%);
+      pointer-events: none;
+      z-index: 199;
+      transition: background 1.2s ease;
+    }
+
+    .screen {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 4vh 5vw;
+      text-align: center;
+      transition: opacity 1.2s ease;
+    }
+    .hidden { display: none !important; }
+    .fading { opacity: 0; pointer-events: none; }
+
+    /* ============ TITLE SCREEN ============ */
+    #title-screen { gap: 2vh; }
+    .title-han {
+      font-size: clamp(56px, 14vw, 180px);
+      font-weight: 900;
+      letter-spacing: 0.4em;
+      color: var(--paper);
+      text-shadow: 0 0 30px rgba(165,40,40,0.2);
+      margin-left: 0.4em;
+    }
+    .title-romaji {
+      font-size: clamp(14px, 2.2vw, 22px);
+      letter-spacing: 0.6em;
+      color: var(--paper-dim);
+      margin-bottom: 2vh;
+    }
+    .title-act {
+      font-size: clamp(14px, 1.8vw, 18px);
+      letter-spacing: 0.4em;
+      color: var(--paper-dim);
+    }
+    .title-tagline {
+      font-style: italic;
+      color: var(--paper-dim);
+      max-width: 520px;
+      line-height: 1.9;
+      font-size: clamp(13px, 1.5vw, 17px);
+      margin: 4vh 0;
+    }
+    .title-tagline .en {
+      display: block;
+      margin-top: 0.6em;
+      font-family: "Noto Serif TC", serif;
+      color: rgba(216,205,184,0.4);
+      font-size: 0.85em;
+    }
+    .title-warning {
+      font-size: 12px;
+      color: rgba(216,205,184,0.4);
+      max-width: 380px;
+      line-height: 1.7;
+      margin-top: 2vh;
+    }
+    .button {
+      background: transparent;
+      color: var(--paper);
+      border: 1px solid var(--paper-dim);
+      padding: 14px 36px;
+      font-family: inherit;
+      font-size: 15px;
+      letter-spacing: 0.4em;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      margin-top: 2vh;
+    }
+    .button:hover {
+      background: var(--paper);
+      color: var(--ink);
+      letter-spacing: 0.6em;
+    }
+    .button.danger { border-color: rgba(165,40,40,0.5); color: rgba(216,205,184,0.85); }
+    .button.danger:hover { background: var(--blood); color: var(--paper); border-color: var(--blood); }
+
+    /* ============ SCENE / GAME ============ */
+    #game-screen {
+      display: flex; flex-direction: column;
+      justify-content: space-between;
+      padding: 0;
+    }
+    /* Newspaper-style header */
+    #chapter-bar {
+      position: relative;
+      padding: 16px 28px;
+      border-bottom: 1px solid rgba(216,205,184,0.12);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px;
+      letter-spacing: 0.3em;
+      color: var(--paper-dim);
+      background: rgba(0,0,0,0.3);
+    }
+    #chapter-bar .ch-name { font-weight: 700; }
+    #chapter-bar .ch-meta { font-style: italic; opacity: 0.7; }
+
+    #scene-stage {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 5vh 6vw;
+      position: relative;
+    }
+    #scene-text-wrap {
+      max-width: 760px;
+      width: 100%;
+      text-align: center;
+    }
+    .scene-narration {
+      font-size: clamp(18px, 2.4vw, 28px);
+      line-height: 2;
+      letter-spacing: 0.08em;
+      color: var(--paper);
+      min-height: 4em;
+    }
+    .scene-narration.dialogue { font-style: italic; color: #e8dec7; }
+    .scene-narration .speaker {
+      display: block;
+      font-size: 0.7em;
+      letter-spacing: 0.5em;
+      color: var(--paper-dim);
+      margin-bottom: 0.6em;
+      font-style: normal;
+    }
+    .scene-prompt {
+      margin-top: 4vh;
+      font-size: 13px;
+      letter-spacing: 0.4em;
+      color: rgba(216,205,184,0.45);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Choices */
+    .choice-list {
+      display: flex; flex-direction: column;
+      gap: 14px;
+      margin-top: 4vh;
+      max-width: 640px;
+      width: 100%;
+    }
+    .choice-btn {
+      background: rgba(20,16,12,0.6);
+      border: 1px solid rgba(216,205,184,0.2);
+      color: var(--paper);
+      padding: 18px 24px;
+      font-family: inherit;
+      font-size: 16px;
+      line-height: 1.7;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.04em;
+    }
+    .choice-btn:hover {
+      background: rgba(165,40,40,0.12);
+      border-color: var(--paper);
+      transform: translateX(4px);
+    }
+    .choice-btn .tag {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      color: var(--paper-dim);
+      margin-bottom: 6px;
+      font-style: italic;
+    }
+
+    /* Action overlay */
+    #action-panel {
+      width: 100%;
+      max-width: 880px;
+      display: flex;
+      gap: 24px;
+      align-items: stretch;
+    }
+    #action-info {
+      flex: 1;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+    }
+    .action-instruction {
+      font-size: 22px;
+      line-height: 1.8;
+      color: var(--paper);
+    }
+    .action-detail {
+      font-size: 14px;
+      color: var(--paper-dim);
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+    }
+    .action-counter {
+      font-size: 64px;
+      font-weight: 900;
+      color: var(--blood-bright);
+      letter-spacing: 0;
+      line-height: 1;
+      font-family: "Courier New", monospace;
+    }
+    .action-counter .total {
+      color: var(--paper-dim);
+      font-size: 0.5em;
+      margin-left: 0.2em;
+    }
+    .action-timer {
+      font-size: 14px;
+      color: var(--paper-dim);
+      letter-spacing: 0.3em;
+    }
+    .action-timer.danger { color: var(--blood-bright); animation: pulse 0.4s ease-in-out infinite; }
+
+    #camera-box {
+      width: 320px;
+      aspect-ratio: 4/3;
+      background: #000;
+      border: 1px solid rgba(216,205,184,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    #camera-box video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+      filter: grayscale(0.8) contrast(1.05) brightness(0.85);
+    }
+    #camera-box canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      transform: scaleX(-1);
+    }
+    #camera-box .cam-label {
+      position: absolute;
+      top: 6px; left: 8px;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: rgba(216,205,184,0.6);
+      text-shadow: 0 0 4px black;
+    }
+    #camera-box .cam-status {
+      position: absolute;
+      bottom: 6px; right: 8px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: rgba(216,205,184,0.7);
+      text-shadow: 0 0 4px black;
+    }
+    .action-skip {
+      margin-top: 16px;
+      background: transparent;
+      border: 1px dashed rgba(216,205,184,0.25);
+      color: rgba(216,205,184,0.5);
+      padding: 8px 14px;
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+    .action-skip:hover { color: var(--paper); border-color: var(--paper-dim); }
+
+    /* HUD bottom */
+    #hud {
+      padding: 12px 28px;
+      border-top: 1px solid rgba(216,205,184,0.12);
+      display: flex;
+      gap: 28px;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0,0,0,0.4);
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--paper-dim);
+    }
+    .meter {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .meter .label { min-width: 4em; }
+    .meter .bar {
+      width: 90px;
+      height: 4px;
+      background: rgba(216,205,184,0.1);
+      position: relative;
+    }
+    .meter .bar .fill {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      transition: width 0.8s cubic-bezier(.5,0,.3,1);
+    }
+    .meter.silence .fill { background: var(--silence); }
+    .meter.fear .fill { background: var(--blood-bright); }
+    .meter.will .fill { background: var(--will); }
+    .meter.fear.high .fill {
+      box-shadow: 0 0 8px var(--blood-bright);
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    /* Cinematic black flash */
+    #black-flash {
+      position: fixed; inset: 0;
+      background: black;
+      z-index: 300;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    #black-flash.show { opacity: 1; }
+
+    /* Calibration overlay */
+    #calibration {
+      position: absolute; inset: 0;
+      background: rgba(10,9,7,0.92);
+      z-index: 50;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 24px;
+      padding: 5vh 5vw;
+    }
+    #calibration h2 {
+      font-size: 22px;
+      letter-spacing: 0.3em;
+      font-weight: 700;
+      color: var(--paper);
+    }
+    #calibration p {
+      max-width: 460px;
+      line-height: 2;
+      font-size: 15px;
+      color: var(--paper-dim);
+    }
+    #calibration .calib-cam {
+      width: 280px; aspect-ratio: 4/3;
+      background: #000;
+      position: relative;
+      border: 1px solid rgba(216,205,184,0.2);
+    }
+    #calibration .calib-cam video {
+      width: 100%; height: 100%; object-fit: cover;
+      transform: scaleX(-1);
+      filter: grayscale(0.8);
+    }
+    #calibration .calib-countdown {
+      font-size: 80px; font-weight: 900;
+      color: var(--blood-bright);
+      font-family: "Courier New", monospace;
+      line-height: 1;
+    }
+
+    /* Ending screen */
+    .ending-stats {
+      display: flex; flex-direction: column;
+      gap: 12px;
+      margin: 3vh 0;
+      width: 100%;
+      max-width: 420px;
+    }
+    .ending-row {
+      display: flex; justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(216,205,184,0.15);
+      letter-spacing: 0.3em;
+      font-size: 14px;
+    }
+    .ending-row .v { color: var(--paper); font-family: "Courier New", monospace; }
+    .ending-quote {
+      max-width: 560px;
+      font-style: italic;
+      line-height: 2;
+      font-size: 17px;
+      color: var(--paper);
+      margin: 3vh 0;
+    }
+    .ending-name {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 0.4em;
+      color: var(--blood-bright);
+      margin: 2vh 0;
+    }
+    .ending-bracket {
+      font-size: 12px;
+      letter-spacing: 0.4em;
+      color: var(--paper-dim);
+    }
+
+    /* Camera errors */
+    .error-msg {
+      color: var(--blood-bright);
+      font-size: 13px;
+      max-width: 420px;
+      line-height: 1.8;
+    }
+
+    /* Typewriter caret */
+    .caret {
+      display: inline-block;
+      width: 0.6em;
+      background: var(--paper);
+      margin-left: 4px;
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Mobile tweaks */
+    @media (max-width: 720px) {
+      #action-panel { flex-direction: column; align-items: center; }
+      #camera-box { width: 100%; max-width: 320px; }
+      .scene-narration { font-size: 18px; line-height: 1.9; }
+      #hud { gap: 12px; padding: 10px 12px; flex-wrap: wrap; }
+      .meter .bar { width: 60px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ========== TITLE SCREEN ========== -->
+  <div id="title-screen" class="screen">
+    <div class="title-romaji">BÚ — BĀNG</div>
+    <div class="title-han">無望</div>
+    <div class="title-act">ACT 1 ｜ 台北・大稻埕 ｜ 主題：失去</div>
+    <div class="title-tagline">
+      在一切都被剝奪的年代，身體是最後的自由。
+      <span class="en">In an era where everything is stripped away, your body is the last frontier of freedom.</span>
+    </div>
+    <button id="start-btn" class="button danger">開 始</button>
+    <div class="title-warning">
+      本作將請求使用您的攝影機，透過姿勢偵測讓「身體成為敘事的載體」。<br>
+      影像僅在本機處理、不會上傳。<br>
+      建議在能站起、有空間做深蹲與伏地動作的環境遊玩。
+    </div>
+  </div>
+
+  <!-- ========== GAME SCREEN ========== -->
+  <div id="game-screen" class="screen hidden">
+    <div id="chapter-bar">
+      <div class="ch-name" id="ch-name">第 一 幕 ｜ 台 北</div>
+      <div class="ch-meta" id="ch-meta">大稻埕 · 1952</div>
+    </div>
+
+    <div id="scene-stage">
+      <div id="scene-text-wrap">
+        <div class="scene-narration" id="scene-narration"></div>
+        <div class="scene-prompt" id="scene-prompt">點擊 或 按 空白鍵 繼續</div>
+      </div>
+
+      <div id="choice-wrap" class="hidden">
+        <div class="choice-list" id="choice-list"></div>
+      </div>
+
+      <div id="action-wrap" class="hidden">
+        <div id="action-panel">
+          <div id="action-info">
+            <div class="action-instruction" id="action-instruction"></div>
+            <div class="action-detail" id="action-detail"></div>
+            <div class="action-counter" id="action-counter"></div>
+            <div class="action-timer" id="action-timer"></div>
+            <button class="action-skip" id="action-skip">慈悲模式：跳過此動作</button>
+          </div>
+          <div id="camera-box">
+            <span class="cam-label">CAM · 鏡頭</span>
+            <video id="cam-video" autoplay playsinline muted></video>
+            <canvas id="cam-canvas"></canvas>
+            <span class="cam-status" id="cam-status">待機</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="hud">
+      <div class="meter silence"><span class="label">SILENCE 沈默</span><div class="bar"><div class="fill" id="m-silence" style="width:0%"></div></div></div>
+      <div class="meter fear" id="meter-fear"><span class="label">FEAR 恐懼</span><div class="bar"><div class="fill" id="m-fear" style="width:0%"></div></div></div>
+      <div class="meter will"><span class="label">WILL 意志</span><div class="bar"><div class="fill" id="m-will" style="width:80%"></div></div></div>
+    </div>
+  </div>
+
+  <!-- ========== CALIBRATION OVERLAY ========== -->
+  <div id="calibration" class="hidden">
+    <h2 id="calib-title">校 準 ｜ Calibration</h2>
+    <p id="calib-msg">請站到攝影機前，讓上半身與膝蓋同時入鏡。<br>系統需要記下你的「站姿基準」，才能感知你的呼吸與顫抖。</p>
+    <div class="calib-cam">
+      <video id="calib-video" autoplay playsinline muted></video>
+    </div>
+    <div class="calib-countdown" id="calib-count">—</div>
+    <div id="calib-error" class="error-msg hidden"></div>
+    <button class="button" id="calib-start">準備好了</button>
+  </div>
+
+  <div id="black-flash"></div>
+
+  <script type="module">
+    import {
+      PoseLandmarker,
+      FilesetResolver
+    } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.9/vision_bundle.mjs";
+
+    /* =========================================================
+     * STATE
+     * ========================================================= */
+    const state = {
+      scene: 0,
+      stats: { SILENCE: 0, FEAR: 0, WILL: 80, ROOT: 0, ESCAPE: 0 },
+      cameraReady: false,
+      poseStream: null,
+      mediaStream: null,
+      baselineHipY: null,
+      baselineShoulderY: null,
+      lastPoseLandmarks: null,
+    };
+
+    /* =========================================================
+     * SCENE SCRIPT — Act 1 (六場)
+     * 所有場景以 array 排序逐步推進。
+     * type: cinematic | choice | action | ending
+     * ========================================================= */
+    const SCENES = [
+      // -------- Scene 1: 一個夜的失蹤 --------
+      { type: "cinematic", chapter: { name: "第 一 幕 · 場景 一", meta: "失 蹤" },
+        lines: [
+          { text: "街燈昏暗。" },
+          { text: "小美站在街口。" },
+          { text: "遠處傳來車聲。" },
+          { text: "一輛黑色轎車停下，兩個男人下車。" },
+          { speaker: "男 子 A", text: "「就是她。」", dialogue: true },
+          { text: "小美轉頭看向你。" },
+          { speaker: "小 美", text: "「不要過來。」", dialogue: true },
+          { text: "她低聲說。" },
+          { text: "男子抓住她。你衝過去——" },
+          { text: "但車門關上。" },
+          { text: "黑頭車消失於街角。" },
+          { fx: "fadeBlack" },
+        ]
+      },
+
+      // -------- Scene 2: 街市接頭（選擇） --------
+      { type: "cinematic", chapter: { name: "第 一 幕 · 場景 二", meta: "街 市 接 頭" },
+        lines: [
+          { text: "陰暗的茶葉行旁。" },
+          { text: "一個男人從陰影裡走出。" },
+          { speaker: "陌 生 男 子", text: "「你在找她。」", dialogue: true },
+        ]
+      },
+      { type: "choice",
+        prompt: "你怎麼回答？",
+        choices: [
+          { tag: "沈 默", text: "默默點頭。", effects: { SILENCE: +6 },
+            after: [
+              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天香茶行旁。我會留下訊息。」", dialogue: true },
+            ]
+          },
+          { tag: "謊 言", text: "「她是誰？我不認識什麼小美。」", effects: { SILENCE: +12, FEAR: +6 },
+            after: [
+              { text: "他盯著你看了很久。" },
+              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天香茶行旁。如果你真的想知道。」", dialogue: true },
+            ]
+          },
+          { tag: "暴 露", text: "「她是我未婚妻！告訴我她在哪裡！」", effects: { SILENCE: -8, FEAR: +18 },
+            after: [
+              { text: "他猛地拉住你的衣領，把你壓進牆角。" },
+              { speaker: "陌 生 男 子", text: "「你想被聽見嗎？小聲一點。明天。大稻埕。天香茶行旁。」", dialogue: true },
+              { text: "你的手在發抖。" },
+            ]
+          },
+        ]
+      },
+      { type: "cinematic",
+        lines: [
+          { text: "遠處突然傳來查緝隊的火把聲。" },
+          { text: "你看見幾個官僚正在收錢。" },
+          { speaker: "心 中 一 句", text: "「這城市沒有乾淨的地方。」", dialogue: true },
+          { fx: "fadeBlack" },
+        ]
+      },
+
+      // -------- Scene 3: 早晨的大稻埕 + 搬貨（深蹲 ×3） --------
+      { type: "cinematic", chapter: { name: "第 一 幕 · 場景 三", meta: "大 稻 埕 · 清 晨" },
+        lines: [
+          { text: "天色剛亮。" },
+          { text: "人來人往。攤販、布店、茶行。" },
+          { text: "一個老婦人攔住你。" },
+          { speaker: "老 婦 人", text: "「少年家，幫我搬這擔菜，等下分你一些。」", dialogue: true },
+        ]
+      },
+      { type: "action",
+        action: "squat",
+        target: 3,
+        timeoutSec: null,
+        instruction: "搬 起 菜 擔",
+        detail: "請對著攝影機完成 3 次深蹲。\n每一次彎下，都是這片土地交給你的重量。",
+        success: { ROOT: +5, FEAR: -4, WILL: +5 },
+        fail: { WILL: -6, FEAR: +4 },
+        afterSuccess: [
+          { text: "你把菜擔放穩。" },
+          { speaker: "老 婦 人", text: "「謝謝你。少年家——」", dialogue: true },
+          { speaker: "老 婦 人", text: "「這裡最近不太平。少說、少看、少問。」", dialogue: true },
+        ],
+        afterFail: [
+          { text: "你撐不住，菜擔翻倒。" },
+          { speaker: "老 婦 人", text: "「算了，少年家。你回家吧。」", dialogue: true },
+          { text: "她沒看你最後一眼。" },
+        ],
+      },
+
+      // -------- Scene 4: 槍聲 + 伏地 --------
+      { type: "cinematic", chapter: { name: "第 一 幕 · 場景 四", meta: "槍 響" },
+        lines: [
+          { text: "前方人群突然騷動。" },
+          { text: "幾個查緝員攔下一個賣菸的婦人。" },
+          { text: "她大喊：「我沒有！我沒有！」" },
+          { text: "圍觀的人越來越多。情緒在升高。" },
+          { text: "—— 砰。" },
+          { text: "—— 砰 砰。" },
+          { fx: "shake" },
+        ]
+      },
+      { type: "action",
+        action: "prone",
+        target: 1,
+        timeoutSec: 8,
+        instruction: "伏 地 ！",
+        detail: "在 8 秒內趴下，讓畫面中的你呈水平躺姿。\n保持低姿，子彈不認識誰是誰。",
+        success: { ESCAPE: +12, FEAR: +6 },
+        fail: { WILL: -22, FEAR: +24 },
+        afterSuccess: [
+          { text: "你趴倒在攤位下。" },
+          { text: "一顆子彈擦過頭頂的木板。木屑落在你頸後。" },
+          { text: "你聽見自己的心跳——快得像有人在敲門。" },
+        ],
+        afterFail: [
+          { text: "你來不及反應。" },
+          { text: "一顆子彈擦過你的肩膀。" },
+          { text: "你倒在地上，分不清那是你的血還是別人的。" },
+          { text: "有人把你拖進巷子裡。" },
+        ],
+      },
+
+      // -------- Scene 5: 紙條 --------
+      { type: "cinematic", chapter: { name: "第 一 幕 · 場景 五", meta: "紙 條" },
+        lines: [
+          { text: "槍聲停了。混亂沒停。" },
+          { text: "你的手碰到地上一張紙條。" },
+          { speaker: "紙 條 上 的 字 跡", text: "「我會被送去基隆。快來救我。」 —— 小美", dialogue: true },
+          { text: "遠處有人喊：" },
+          { speaker: "路 人", text: "「基隆港今晚有船！」", dialogue: true },
+          { text: "你把紙條塞進口袋。" },
+          { text: "畫面慢慢變黑。" },
+          { fx: "fadeBlack" },
+        ]
+      },
+
+      // -------- 結局判定 --------
+      { type: "ending" },
+    ];
+
+    /* =========================================================
+     * UTILS
+     * ========================================================= */
+    const $ = (id) => document.getElementById(id);
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+    function applyEffects(eff) {
+      if (!eff) return;
+      for (const k in eff) {
+        state.stats[k] = clamp((state.stats[k] || 0) + eff[k], 0, 100);
+      }
+      updateHUD();
+    }
+
+    function updateHUD() {
+      $("m-silence").style.width = state.stats.SILENCE + "%";
+      $("m-fear").style.width = state.stats.FEAR + "%";
+      $("m-will").style.width = state.stats.WILL + "%";
+      const fearMeter = $("meter-fear");
+      if (state.stats.FEAR >= 70) fearMeter.classList.add("high");
+      else fearMeter.classList.remove("high");
+      // FEAR-driven vignette (per handbook 7.1)
+      const v = clamp(state.stats.FEAR / 100, 0, 1);
+      document.documentElement.style.setProperty("--vignette", v.toFixed(2));
+    }
+
+    /* =========================================================
+     * CINEMATIC TYPEWRITER
+     * ========================================================= */
+    let waitingForAdvance = null;
+    let typingActive = false;
+
+    function showPrompt(show) {
+      $("scene-prompt").style.visibility = show ? "visible" : "hidden";
+    }
+
+    async function typeLine(line) {
+      const wrap = $("scene-narration");
+      wrap.classList.toggle("dialogue", !!line.dialogue);
+      wrap.innerHTML = "";
+      if (line.speaker) {
+        const sp = document.createElement("span");
+        sp.className = "speaker";
+        sp.textContent = line.speaker;
+        wrap.appendChild(sp);
+      }
+      const txt = document.createElement("span");
+      wrap.appendChild(txt);
+      const caret = document.createElement("span");
+      caret.className = "caret";
+      caret.innerHTML = "&nbsp;";
+      wrap.appendChild(caret);
+
+      typingActive = true;
+      const full = line.text || "";
+      const speed = line.dialogue ? 70 : 55;
+      for (let i = 0; i < full.length; i++) {
+        if (!typingActive) { txt.textContent = full; break; }
+        txt.textContent += full[i];
+        await sleep(speed);
+      }
+      typingActive = false;
+      caret.remove();
+    }
+
+    function waitForAdvance() {
+      return new Promise(resolve => {
+        waitingForAdvance = resolve;
+        showPrompt(true);
+      });
+    }
+
+    function consumeAdvance() {
+      if (typingActive) {
+        // Skip current typing
+        typingActive = false;
+        return;
+      }
+      if (waitingForAdvance) {
+        const r = waitingForAdvance;
+        waitingForAdvance = null;
+        showPrompt(false);
+        r();
+      }
+    }
+
+    document.addEventListener("click", (e) => {
+      // Don't consume clicks on buttons / choices
+      if (e.target.closest("button")) return;
+      if (e.target.closest(".choice-list")) return;
+      consumeAdvance();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.code === "Space" || e.code === "Enter") {
+        e.preventDefault();
+        consumeAdvance();
+      }
+    });
+
+    async function fadeBlack() {
+      const fl = $("black-flash");
+      fl.classList.add("show");
+      await sleep(800);
+      fl.classList.remove("show");
+      await sleep(700);
+    }
+
+    async function shakeScreen() {
+      const stage = $("scene-stage");
+      const animations = [
+        [0,0],[8,-4],[-6,5],[10,-2],[-8,6],[4,-3],[0,0]
+      ];
+      for (const [x,y] of animations) {
+        stage.style.transform = `translate(${x}px, ${y}px)`;
+        await sleep(50);
+      }
+      stage.style.transform = "";
+    }
+
+    async function runCinematic(scene) {
+      if (scene.chapter) {
+        $("ch-name").textContent = scene.chapter.name;
+        $("ch-meta").textContent = scene.chapter.meta;
+      }
+      $("choice-wrap").classList.add("hidden");
+      $("action-wrap").classList.add("hidden");
+      $("scene-text-wrap").classList.remove("hidden");
+
+      for (const line of scene.lines) {
+        if (line.fx === "fadeBlack") { await fadeBlack(); continue; }
+        if (line.fx === "shake") { await shakeScreen(); continue; }
+        await typeLine(line);
+        await waitForAdvance();
+      }
+    }
+
+    /* =========================================================
+     * CHOICE
+     * ========================================================= */
+    async function runChoice(scene) {
+      $("scene-text-wrap").classList.add("hidden");
+      $("action-wrap").classList.add("hidden");
+      const wrap = $("choice-wrap");
+      const list = $("choice-list");
+      list.innerHTML = "";
+      wrap.classList.remove("hidden");
+
+      return new Promise(resolve => {
+        scene.choices.forEach((c, i) => {
+          const btn = document.createElement("button");
+          btn.className = "choice-btn";
+          btn.innerHTML = `<span class="tag">[ ${c.tag} ]</span>${c.text}`;
+          btn.addEventListener("click", async () => {
+            applyEffects(c.effects);
+            wrap.classList.add("hidden");
+            $("scene-text-wrap").classList.remove("hidden");
+            // Show post-choice lines
+            for (const line of (c.after || [])) {
+              if (line.fx === "fadeBlack") { await fadeBlack(); continue; }
+              if (line.fx === "shake") { await shakeScreen(); continue; }
+              await typeLine(line);
+              await waitForAdvance();
+            }
+            resolve();
+          });
+          list.appendChild(btn);
+        });
+      });
+    }
+
+    /* =========================================================
+     * ACTION (MediaPipe pose)
+     * ========================================================= */
+    let poseLandmarker = null;
+    let poseInitPromise = null;
+
+    async function initPoseLandmarker() {
+      if (poseLandmarker) return poseLandmarker;
+      if (poseInitPromise) return poseInitPromise;
+      poseInitPromise = (async () => {
+        const vision = await FilesetResolver.forVisionTasks(
+          "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.9/wasm"
+        );
+        poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
+          baseOptions: {
+            modelAssetPath:
+              "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+            delegate: "GPU"
+          },
+          runningMode: "VIDEO",
+          numPoses: 1,
+        });
+        return poseLandmarker;
+      })();
+      return poseInitPromise;
+    }
+
+    async function startCamera(videoEl) {
+      if (state.mediaStream) {
+        videoEl.srcObject = state.mediaStream;
+        await videoEl.play().catch(() => {});
+        return state.mediaStream;
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } },
+        audio: false
+      });
+      state.mediaStream = stream;
+      videoEl.srcObject = stream;
+      await new Promise(res => {
+        if (videoEl.readyState >= 2) res();
+        else videoEl.onloadedmetadata = () => res();
+      });
+      await videoEl.play().catch(() => {});
+      return stream;
+    }
+
+    function stopCamera() {
+      if (state.mediaStream) {
+        state.mediaStream.getTracks().forEach(t => t.stop());
+        state.mediaStream = null;
+      }
+    }
+
+    /* ----- Calibration ----- */
+    async function calibrate() {
+      const calib = $("calibration");
+      const video = $("calib-video");
+      const errBox = $("calib-error");
+      const startBtn = $("calib-start");
+      const countEl = $("calib-count");
+      $("calib-title").textContent = "校 準 ｜ Calibration";
+      $("calib-msg").innerHTML = "請站到攝影機前，讓上半身與膝蓋同時入鏡。<br>系統需要記下你的「站姿基準」，才能感知你的呼吸與顫抖。";
+      errBox.classList.add("hidden");
+      countEl.textContent = "—";
+      startBtn.classList.remove("hidden");
+      calib.classList.remove("hidden");
+
+      try {
+        await startCamera(video);
+        await initPoseLandmarker();
+      } catch (err) {
+        errBox.classList.remove("hidden");
+        errBox.textContent = "無法開啟攝影機或載入模型：" + err.message + "\n你可以使用「慈悲模式」按鈕跳過動作場景。";
+        startBtn.textContent = "知 道 了";
+        return new Promise(res => {
+          startBtn.onclick = () => {
+            calib.classList.add("hidden");
+            res({ ok: false });
+          };
+        });
+      }
+
+      return new Promise(res => {
+        startBtn.onclick = async () => {
+          startBtn.classList.add("hidden");
+          // 3 sec countdown, capturing baseline
+          let samples = [];
+          for (let s = 3; s >= 1; s--) {
+            countEl.textContent = String(s);
+            const t0 = performance.now();
+            while (performance.now() - t0 < 1000) {
+              const result = await detectOnce(video);
+              if (result && result.landmarks && result.landmarks[0]) {
+                samples.push(result.landmarks[0]);
+              }
+              await sleep(60);
+            }
+          }
+          countEl.textContent = "0";
+          if (samples.length < 5) {
+            errBox.classList.remove("hidden");
+            errBox.textContent = "沒有偵測到完整的人形。請調整距離與光線後再試。";
+            startBtn.textContent = "重 試";
+            startBtn.classList.remove("hidden");
+            startBtn.onclick = () => calibrate().then(res);
+            return;
+          }
+          // Average hip / shoulder y
+          let hipY = 0, shY = 0;
+          for (const lm of samples) {
+            hipY += (lm[23].y + lm[24].y) / 2;
+            shY  += (lm[11].y + lm[12].y) / 2;
+          }
+          state.baselineHipY = hipY / samples.length;
+          state.baselineShoulderY = shY / samples.length;
+          state.cameraReady = true;
+          calib.classList.add("hidden");
+          res({ ok: true });
+        };
+      });
+    }
+
+    async function detectOnce(videoEl) {
+      if (!poseLandmarker) return null;
+      if (videoEl.readyState < 2) return null;
+      try {
+        const ts = performance.now();
+        return poseLandmarker.detectForVideo(videoEl, ts);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    /* ----- Action runner ----- */
+    async function runAction(scene) {
+      $("scene-text-wrap").classList.add("hidden");
+      $("choice-wrap").classList.add("hidden");
+      $("action-wrap").classList.remove("hidden");
+      $("action-instruction").textContent = scene.instruction;
+      $("action-detail").textContent = scene.detail;
+      $("action-counter").innerHTML = "";
+      $("action-timer").textContent = "";
+      $("action-timer").classList.remove("danger");
+
+      // Always need a calibrated camera before action
+      if (!state.cameraReady) {
+        const c = await calibrate();
+        if (!c.ok) {
+          // User can only skip
+        }
+      }
+
+      const video = $("cam-video");
+      const camStatus = $("cam-status");
+
+      let usedSkip = false;
+      const skipBtn = $("action-skip");
+      skipBtn.onclick = () => { usedSkip = true; };
+
+      let success = false;
+
+      if (state.cameraReady) {
+        try {
+          await startCamera(video);
+        } catch (e) {
+          camStatus.textContent = "鏡頭故障";
+        }
+        camStatus.textContent = "偵測中";
+
+        if (scene.action === "squat") {
+          const result = await detectSquats(video, scene.target, scene.timeoutSec, usedSkip);
+          success = result.success;
+          if (result.skipped) usedSkip = true;
+        } else if (scene.action === "prone") {
+          const result = await detectProne(video, scene.timeoutSec, usedSkip);
+          success = result.success;
+          if (result.skipped) usedSkip = true;
+        }
+        camStatus.textContent = "結束";
+      } else {
+        // No camera: wait for skip
+        $("action-counter").innerHTML = "<span style='font-size:18px;letter-spacing:.3em;color:var(--paper-dim)'>無攝影機 — 請按「慈悲模式」跳過</span>";
+        await new Promise(r => {
+          const i = setInterval(() => { if (usedSkip) { clearInterval(i); r(); } }, 100);
+        });
+        success = false;
+      }
+
+      // Mercy mode counts as a soft fail (no penalty, no reward)
+      if (usedSkip && !success) {
+        applyEffects({ FEAR: +4 });
+        $("scene-text-wrap").classList.remove("hidden");
+        $("action-wrap").classList.add("hidden");
+        await typeLine({ text: "（你選擇旁觀。記憶的重量，無法借用別人的身體承擔。）" });
+        await waitForAdvance();
+        return;
+      }
+
+      applyEffects(success ? scene.success : scene.fail);
+
+      $("scene-text-wrap").classList.remove("hidden");
+      $("action-wrap").classList.add("hidden");
+      const lines = success ? scene.afterSuccess : scene.afterFail;
+      for (const line of lines) {
+        if (line.fx === "fadeBlack") { await fadeBlack(); continue; }
+        if (line.fx === "shake") { await shakeScreen(); continue; }
+        await typeLine(line);
+        await waitForAdvance();
+      }
+    }
+
+    /* ----- Squat detection ----- */
+    async function detectSquats(video, target, timeoutSec, skippedRef) {
+      let count = 0;
+      let phase = "up";   // 'up' or 'down'
+      const baselineHipY = state.baselineHipY;
+      // Down threshold: hip drops by >= 8% of frame height below baseline (y bigger means lower in img)
+      const DOWN_TH = baselineHipY + 0.08;
+      const UP_TH = baselineHipY + 0.03;
+      const counter = $("action-counter");
+      counter.innerHTML = `0<span class="total"> / ${target}</span>`;
+
+      const t0 = performance.now();
+      const limitMs = (timeoutSec || 90) * 1000;
+
+      let skipped = false;
+      const skipBtn = $("action-skip");
+      const oldHandler = skipBtn.onclick;
+      skipBtn.onclick = () => { skipped = true; if (oldHandler) oldHandler(); };
+
+      while (count < target && (performance.now() - t0) < limitMs && !skipped) {
+        const result = await detectOnce(video);
+        drawDebug(result);
+        if (result && result.landmarks && result.landmarks[0]) {
+          const lm = result.landmarks[0];
+          const hipY = (lm[23].y + lm[24].y) / 2;
+          if (phase === "up" && hipY > DOWN_TH) {
+            phase = "down";
+          } else if (phase === "down" && hipY < UP_TH) {
+            phase = "up";
+            count++;
+            counter.innerHTML = `${count}<span class="total"> / ${target}</span>`;
+          }
+        }
+        await sleep(50);
+      }
+      return { success: count >= target, skipped };
+    }
+
+    /* ----- Prone detection ----- */
+    async function detectProne(video, timeoutSec, skippedRef) {
+      const limitMs = (timeoutSec || 8) * 1000;
+      const t0 = performance.now();
+      let success = false;
+      let skipped = false;
+      const skipBtn = $("action-skip");
+      const oldHandler = skipBtn.onclick;
+      skipBtn.onclick = () => { skipped = true; if (oldHandler) oldHandler(); };
+
+      const counter = $("action-counter");
+      const timer = $("action-timer");
+
+      // Need to hold prone for ~0.8 sec
+      let holdStart = null;
+      const HOLD_MS = 800;
+
+      while ((performance.now() - t0) < limitMs && !skipped && !success) {
+        const elapsed = (performance.now() - t0) / 1000;
+        const remaining = ((timeoutSec || 8) - elapsed).toFixed(1);
+        timer.textContent = `倒數 ${remaining} 秒`;
+        if (parseFloat(remaining) < 3) timer.classList.add("danger");
+
+        const result = await detectOnce(video);
+        drawDebug(result);
+        if (result && result.landmarks && result.landmarks[0]) {
+          const lm = result.landmarks[0];
+          const isProne = checkProne(lm);
+          counter.innerHTML = isProne
+            ? `<span style="color:var(--will);font-size:32px;letter-spacing:.2em">伏 地</span>`
+            : `<span style="color:var(--paper-dim);font-size:24px;letter-spacing:.2em">站 立</span>`;
+          if (isProne) {
+            if (!holdStart) holdStart = performance.now();
+            else if (performance.now() - holdStart >= HOLD_MS) success = true;
+          } else {
+            holdStart = null;
+          }
+        }
+        await sleep(50);
+      }
+
+      timer.textContent = "";
+      timer.classList.remove("danger");
+      return { success, skipped };
+    }
+
+    function checkProne(lm) {
+      // lm is in normalized coords (0..1), y grows downward.
+      // Heuristics: shoulders and hips at similar y (body horizontal),
+      // and shoulders are in lower half of frame.
+      const shY = (lm[11].y + lm[12].y) / 2;
+      const hipY = (lm[23].y + lm[24].y) / 2;
+      const dy = Math.abs(shY - hipY);
+      // Use horizontal spread to compute torso length
+      const shX = (lm[11].x + lm[12].x) / 2;
+      const hipX = (lm[23].x + lm[24].x) / 2;
+      const dx = Math.abs(shX - hipX);
+      // Lying down: dy is small relative to dx (more horizontal than vertical)
+      const horizontal = dy < 0.12 && dx > 0.08;
+      // OR shoulders in extreme lower part (covered by table)
+      const veryLow = shY > 0.7;
+      return horizontal || veryLow;
+    }
+
+    /* ----- Debug overlay (optional minimalistic stick figure) ----- */
+    function drawDebug(result) {
+      const canvas = $("cam-canvas");
+      const video = $("cam-video");
+      if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+        canvas.width = video.videoWidth || 320;
+        canvas.height = video.videoHeight || 240;
+      }
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (!result || !result.landmarks || !result.landmarks[0]) return;
+      const lm = result.landmarks[0];
+      ctx.strokeStyle = "rgba(216,205,184,0.7)";
+      ctx.fillStyle = "rgba(165,40,40,0.85)";
+      ctx.lineWidth = 2;
+      // skeleton
+      const pairs = [[11,12],[11,23],[12,24],[23,24],[11,13],[13,15],[12,14],[14,16],[23,25],[25,27],[24,26],[26,28]];
+      for (const [a,b] of pairs) {
+        ctx.beginPath();
+        ctx.moveTo(lm[a].x * canvas.width, lm[a].y * canvas.height);
+        ctx.lineTo(lm[b].x * canvas.width, lm[b].y * canvas.height);
+        ctx.stroke();
+      }
+      // joints
+      const dots = [11,12,23,24,13,14,15,16,25,26,27,28];
+      for (const i of dots) {
+        ctx.beginPath();
+        ctx.arc(lm[i].x * canvas.width, lm[i].y * canvas.height, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    /* =========================================================
+     * ENDING (per handbook 7.3 thresholds, mapped from FEAR)
+     * ========================================================= */
+    function computeEnding() {
+      const f = state.stats.FEAR;
+      // 7.3 五種結局 thresholds
+      if (f <= 20)  return { name: "《還活著》",       bracket: "FEAR 0–20",   quote: "找到了你要找的，也沒有失去什麼。"};
+      if (f <= 45)  return { name: "《繼續走》",       bracket: "FEAR 21–45",  quote: "找到了，但做了無法完全原諒自己的事。" };
+      if (f <= 70)  return { name: "《沉默的人》",     bracket: "FEAR 46–70",  quote: "你學會了那個年代的生存法則。" };
+      if (f <= 90)  return { name: "《霧中》",         bracket: "FEAR 71–90",  quote: "在尋找中，你逐漸忘記自己在找什麼。" };
+      return         { name: "《無聲的名字》",          bracket: "FEAR 91–100", quote: "你活下來了，但沒有人知道你曾在那裡。" };
+    }
+
+    async function runEnding() {
+      $("choice-wrap").classList.add("hidden");
+      $("action-wrap").classList.add("hidden");
+      $("scene-text-wrap").classList.remove("hidden");
+      $("ch-name").textContent = "第 一 幕 · 終 章";
+      $("ch-meta").textContent = "Act 1 預示 — 你還沒走到第二幕";
+
+      await typeLine({ text: "你把紙條塞進口袋。基隆港，今晚有船。" });
+      await waitForAdvance();
+      await typeLine({ text: "你的身體記得每一次呼吸。歷史也是。" });
+      await waitForAdvance();
+
+      const ending = computeEnding();
+      const wrap = $("scene-narration");
+      wrap.classList.remove("dialogue");
+      wrap.innerHTML = `
+        <div class="ending-bracket">第 一 幕 · 預 示 結 局</div>
+        <div class="ending-name">${ending.name}</div>
+        <div class="ending-bracket">${ending.bracket}</div>
+        <div class="ending-quote">「${ending.quote}」</div>
+        <div class="ending-stats">
+          <div class="ending-row"><span>SILENCE 沈默</span><span class="v">${state.stats.SILENCE}</span></div>
+          <div class="ending-row"><span>FEAR 恐懼</span><span class="v">${state.stats.FEAR}</span></div>
+          <div class="ending-row"><span>WILL 意志</span><span class="v">${state.stats.WILL}</span></div>
+          <div class="ending-row"><span>ROOT 連結</span><span class="v">${state.stats.ROOT}</span></div>
+          <div class="ending-row"><span>ESCAPE 逃脫</span><span class="v">${state.stats.ESCAPE}</span></div>
+        </div>
+        <div class="ending-bracket" style="margin-top:2vh;line-height:2;color:var(--paper-dim)">
+          第 二 幕 ｜ 基 隆 港 ｜ 主題：消失<br>
+          <span style="opacity:.6">完整版開發中。每一次訓練，都是這片土地交給你的重量。</span>
+        </div>
+      `;
+      showPrompt(false);
+
+      // Restart button
+      const btn = document.createElement("button");
+      btn.className = "button danger";
+      btn.style.marginTop = "3vh";
+      btn.textContent = "重 來";
+      btn.onclick = () => location.reload();
+      wrap.appendChild(btn);
+    }
+
+    /* =========================================================
+     * SCENE LOOP
+     * ========================================================= */
+    async function runScenes() {
+      for (state.scene = 0; state.scene < SCENES.length; state.scene++) {
+        const scene = SCENES[state.scene];
+        if (scene.type === "cinematic") await runCinematic(scene);
+        else if (scene.type === "choice") await runChoice(scene);
+        else if (scene.type === "action") await runAction(scene);
+        else if (scene.type === "ending") { await runEnding(); break; }
+      }
+    }
+
+    /* =========================================================
+     * BOOT
+     * ========================================================= */
+    $("start-btn").addEventListener("click", async () => {
+      $("title-screen").classList.add("hidden");
+      $("game-screen").classList.remove("hidden");
+      updateHUD();
+      await fadeBlack();
+      await runScenes();
+    });
+  </script>
+</body>
+</html>
