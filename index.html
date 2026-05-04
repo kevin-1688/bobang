@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BǑ-BĀNG 無望 | 台灣白色恐怖敘事遊戲 | 用身體感受歷史 | 免費試玩</title>
-  <meta name="description" content="台北，1952年，白色恐怖最深的年代。一個人消失了。你的攝影機會偵測你的姿勢——蹲下、趴地、靜止不動。身體是最後還屬於你的東西。敘事冒險遊戲 Act 1 Prototype，免費試玩。" />
+  <meta name="description" content="台北，1947年，白色恐怖剛開始的年代。一個人消失了。你的攝影機會偵測你的姿勢——蹲下、趴地、靜止不動。身體是最後還屬於你的東西。敘事冒險遊戲 Act 1 Prototype，免費試玩。" />
   <link rel="canonical" href="https://kevin-1688.github.io/bobang/" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://kevin-1688.github.io/bobang/" />
   <meta property="og:title" content="BǑ-BĀNG 無望 | 台灣白色恐怖敘事遊戲 | 用身體感受歷史 | 免費試玩" />
-  <meta property="og:description" content="台北，1952年，白色恐怖最深的年代。一個人消失了。你的攝影機偵測你的姿勢——身體是最後還屬於你的東西。Act 1 Prototype 免費試玩。" />
+  <meta property="og:description" content="台北，1947年，白色恐怖剛開始的年代。一個人消失了。你的攝影機偵測你的姿勢——身體是最後還屬於你的東西。Act 1 Prototype 免費試玩。" />
   <meta property="og:image" content="https://kevin-1688.github.io/bobang/bobang-og-cover.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="zh_TW" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="BǑ-BĀNG 無望 | 台灣白色恐怖敘事遊戲" />
-  <meta name="twitter:description" content="台北，1952年，白色恐怖最深的年代。在一切都被剝奪的年代，身體是最後的自由。" />
+  <meta name="twitter:description" content="台北，1947年，白色恐怖剛開始的年代。在一切都被剝奪的年代，身體是最後的自由。" />
   <meta name="twitter:image" content="https://kevin-1688.github.io/bobang/bobang-og-cover.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -590,7 +590,7 @@
      * ========================================================= */
     const SCENES = [
       // -------- Scene 1: 一個夜的失蹤 --------
-      { type: "cinematic", chapter: { name: "第 一 幕 · 場景 一", meta: "失 蹤 · 1952" },
+      { type: "cinematic", chapter: { name: "第 一 幕 · 場景 一", meta: "失 蹤 · 1947" },
         lines: [
           { text: "街燈昏暗。" },
           { text: "小美站在街口。" },
@@ -620,19 +620,19 @@
         choices: [
           { tag: "沈 默", text: "默默點頭。", effects: { SILENCE: +6 },
             after: [
-              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天香茶行旁。我會留下訊息。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天馬茶行旁。我會留下訊息。」", dialogue: true },
             ]
           },
           { tag: "謊 言", text: "「她是誰？我不認識什麼小美。」", effects: { SILENCE: +12, FEAR: +6 },
             after: [
               { text: "他盯著你看了很久。" },
-              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天香茶行旁。如果你真的想知道。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天馬茶行旁。如果你真的想知道。」", dialogue: true },
             ]
           },
           { tag: "暴 露", text: "「她是我未婚妻！告訴我她在哪裡！」", effects: { SILENCE: -8, FEAR: +18 },
             after: [
               { text: "他猛地拉住你的衣領，把你壓進牆角。" },
-              { speaker: "陌 生 男 子", text: "「你想被聽見嗎？小聲一點。明天。大稻埕。天香茶行旁。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「你想被聽見嗎？小聲一點。明天。大稻埕。天馬茶行旁。」", dialogue: true },
               { text: "你的手在發抖。" },
             ]
           },
@@ -640,7 +640,7 @@
       },
       { type: "cinematic",
         lines: [
-          { text: "遠處突然傳來查緝隊的火把聲。" },
+          { text: "遠處突然傳來查緝隊的腳步聲。" },
           { text: "你看見幾個官僚正在收錢。" },
           { speaker: "心 中 一 句", text: "「這城市沒有乾淨的地方。」", dialogue: true },
           { fx: "fadeBlack" },
@@ -714,7 +714,7 @@
         lines: [
           { text: "槍聲停了。混亂沒停。" },
           { text: "你的手碰到地上一張紙條。" },
-          { speaker: "紙 條 上 的 字 跡", text: "「我會被送去基隆。快來救我。」 —— 小美", dialogue: true },
+          { speaker: "紙 條 上 的 字 跡是小美的", text: "「我會被送去基隆。快來救我。」 —— 小美", dialogue: true },
           { text: "遠處有人喊：" },
           { speaker: "路 人", text: "「基隆港今晚有船！」", dialogue: true },
           { text: "你把紙條塞進口袋。" },
@@ -1338,7 +1338,7 @@ function drawText() {
   // Tagline
   ctx.font = '19px "LXGW WenKai Mono TC", serif';
   ctx.fillStyle = 'rgba(195,168,108,0.82)';
-  ctx.fillText('台北・1952　｜　白色恐怖敘事遊戲　｜　Act 1 Prototype', tx, ty + 102);
+  ctx.fillText('台北・1947　｜　白色恐怖敘事遊戲　｜　Act 1 Prototype', tx, ty + 102);
 }
 
 // Re-render once fonts are ready
