@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BǑ-BĀNG 無望 | 台灣白色恐怖敘事遊戲 | 用身體感受歷史 | 免費試玩</title>
-  <meta name="description" content="台北，1947年，白色恐怖剛開始的年代。一個人消失了。你的攝影機會偵測你的姿勢——蹲下、趴地、靜止不動。身體是最後還屬於你的東西。敘事冒險遊戲 Act 1 Prototype，免費試玩。" />
+  <meta name="description" content="台北，1952年，白色恐怖最深的年代。一個人消失了。你的攝影機會偵測你的姿勢——蹲下、趴地、靜止不動。身體是最後還屬於你的東西。敘事冒險遊戲 Act 1 Prototype，免費試玩。" />
   <link rel="canonical" href="https://kevin-1688.github.io/bobang/" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://kevin-1688.github.io/bobang/" />
   <meta property="og:title" content="BǑ-BĀNG 無望 | 台灣白色恐怖敘事遊戲 | 用身體感受歷史 | 免費試玩" />
-  <meta property="og:description" content="台北，1947年，白色恐怖剛開始的年代。一個人消失了。你的攝影機偵測你的姿勢——身體是最後還屬於你的東西。Act 1 Prototype 免費試玩。" />
+  <meta property="og:description" content="台北，1952年，白色恐怖最深的年代。一個人消失了。你的攝影機偵測你的姿勢——身體是最後還屬於你的東西。Act 1 Prototype 免費試玩。" />
   <meta property="og:image" content="https://kevin-1688.github.io/bobang/bobang-og-cover.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="zh_TW" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="BǑ-BĀNG 無望 | 台灣白色恐怖敘事遊戲" />
-  <meta name="twitter:description" content="台北，1947年，白色恐怖剛開始的年代。在一切都被剝奪的年代，身體是最後的自由。" />
+  <meta name="twitter:description" content="台北，1952年，白色恐怖最深的年代。在一切都被剝奪的年代，身體是最後的自由。" />
   <meta name="twitter:image" content="https://kevin-1688.github.io/bobang/bobang-og-cover.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,8 +51,7 @@
       content: "";
       position: fixed; inset: 0;
       background-image:
-        repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px),
-        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.80  0 0 0 0 0.72  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
       mix-blend-mode: overlay;
       pointer-events: none;
       z-index: 200;
@@ -493,7 +492,7 @@
 <body>
   <!-- TITLE SCREEN -->
   <div id="title-screen" class="screen">
-    <div class="title-romaji">BǑ — BĀNG</div>
+    <div class="title-romaji">BÚ — BĀNG</div>
     <div class="title-han">無望</div>
     <div class="title-act">ACT 1 ｜ 台北・大稻埕 ｜ 主題：失去</div>
     <div class="title-tagline">
@@ -512,7 +511,7 @@
   <div id="game-screen" class="screen hidden">
     <div id="chapter-bar">
       <div class="ch-name" id="ch-name">第 一 幕 ｜ 台 北</div>
-      <div class="ch-meta" id="ch-meta">大稻埕 · 1947</div>
+      <div class="ch-meta" id="ch-meta">大稻埕 · 1952</div>
     </div>
 
     <div id="scene-stage">
@@ -590,7 +589,7 @@
      * ========================================================= */
     const SCENES = [
       // -------- Scene 1: 一個夜的失蹤 --------
-      { type: "cinematic", chapter: { name: "第 一 幕 · 場景 一", meta: "失 蹤 · 1947" },
+      { type: "cinematic", chapter: { name: "第 一 幕 · 場景 一", meta: "失 蹤 · 1952" },
         lines: [
           { text: "街燈昏暗。" },
           { text: "小美站在街口。" },
@@ -620,19 +619,19 @@
         choices: [
           { tag: "沈 默", text: "默默點頭。", effects: { SILENCE: +6 },
             after: [
-              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天馬茶行旁。我會留下訊息。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天香茶行旁。我會留下訊息。」", dialogue: true },
             ]
           },
           { tag: "謊 言", text: "「她是誰？我不認識什麼小美。」", effects: { SILENCE: +12, FEAR: +6 },
             after: [
               { text: "他盯著你看了很久。" },
-              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天馬茶行旁。如果你真的想知道。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天香茶行旁。如果你真的想知道。」", dialogue: true },
             ]
           },
           { tag: "暴 露", text: "「她是我未婚妻！告訴我她在哪裡！」", effects: { SILENCE: -8, FEAR: +18 },
             after: [
               { text: "他猛地拉住你的衣領，把你壓進牆角。" },
-              { speaker: "陌 生 男 子", text: "「你想被聽見嗎？小聲一點。明天。大稻埕。天馬茶行旁。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「你想被聽見嗎？小聲一點。明天。大稻埕。天香茶行旁。」", dialogue: true },
               { text: "你的手在發抖。" },
             ]
           },
@@ -640,7 +639,7 @@
       },
       { type: "cinematic",
         lines: [
-          { text: "遠處突然傳來查緝隊的腳步聲。" },
+          { text: "遠處突然傳來查緝隊的火把聲。" },
           { text: "你看見幾個官僚正在收錢。" },
           { speaker: "心 中 一 句", text: "「這城市沒有乾淨的地方。」", dialogue: true },
           { fx: "fadeBlack" },
@@ -714,7 +713,7 @@
         lines: [
           { text: "槍聲停了。混亂沒停。" },
           { text: "你的手碰到地上一張紙條。" },
-          { speaker: "紙 條 上 的 字 跡是小美的", text: "「我會被送去基隆。快來救我。」 —— 小美", dialogue: true },
+          { speaker: "紙 條 上 的 字 跡", text: "「我會被送去基隆。快來救我。」 —— 小美", dialogue: true },
           { text: "遠處有人喊：" },
           { speaker: "路 人", text: "「基隆港今晚有船！」", dialogue: true },
           { text: "你把紙條塞進口袋。" },
@@ -1284,74 +1283,5 @@
       await runScenes();
     });
   </script>
-</body>
-</html>
-
-const sy = (H - sh) / 2;
-  ctx.drawImage(img, sx, sy, sw, sh);
-
-  // Bottom gradient
-  const grad = ctx.createLinearGradient(0, H * 0.25, 0, H);
-  grad.addColorStop(0, 'rgba(0,0,0,0)');
-  grad.addColorStop(0.55, 'rgba(0,0,0,0.6)');
-  grad.addColorStop(1, 'rgba(0,0,0,0.92)');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
-
-  // Top vignette
-  const topGrad = ctx.createLinearGradient(0, 0, 0, 140);
-  topGrad.addColorStop(0, 'rgba(0,0,0,0.55)');
-  topGrad.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = topGrad;
-  ctx.fillRect(0, 0, W, 140);
-
-  drawText();
-}
-
-function drawText() {
-  const tx = 70;
-  const ty = H - 210;
-
-  ctx.shadowColor = 'rgba(0,0,0,0.95)';
-
-  // Title
-  ctx.font = 'bold 76px "LXGW WenKai Mono TC", serif';
-  ctx.shadowBlur = 20;
-  ctx.fillStyle = '#FFE8A0';
-  ctx.fillText('BǑ-BĀNG', tx, ty);
-
-  // Subtitle
-  ctx.font = '34px "LXGW WenKai Mono TC", serif';
-  ctx.shadowBlur = 14;
-  ctx.fillStyle = '#DCC88A';
-  ctx.fillText('無望', tx, ty + 54);
-
-  // Divider
-  ctx.shadowBlur = 0;
-  ctx.strokeStyle = 'rgba(200,155,70,0.55)';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(tx, ty + 76);
-  ctx.lineTo(tx + 440, ty + 76);
-  ctx.stroke();
-
-  // Tagline
-  ctx.font = '19px "LXGW WenKai Mono TC", serif';
-  ctx.fillStyle = 'rgba(195,168,108,0.82)';
-  ctx.fillText('台北・1947　｜　白色恐怖敘事遊戲　｜　Act 1 Prototype', tx, ty + 102);
-}
-
-// Re-render once fonts are ready
-document.fonts.ready.then(() => {
-  if (img.complete && img.naturalWidth > 0) render();
-});
-
-function download() {
-  const link = document.createElement('a');
-  link.download = 'bobang-og-cover.jpg';
-  link.href = canvas.toDataURL('image/jpeg', 0.93);
-  link.click();
-}
-</script>
 </body>
 </html>
