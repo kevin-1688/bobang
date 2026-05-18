@@ -152,6 +152,160 @@
       letter-spacing: 0.02em;
       text-shadow: 0 1px 2px rgba(0,0,0,0.8);
     }
+
+    /* ===== Route choice (title screen) ===== */
+    .route-choice {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 24px;
+      margin: 3vh 0;
+      flex-wrap: wrap;
+    }
+    .route-btn {
+      background: rgba(20,16,12,0.55);
+      border: 1px solid rgba(216,205,184,0.32);
+      color: var(--paper);
+      padding: 28px 32px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      min-width: 220px;
+      max-width: 280px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+    }
+    .route-btn:hover {
+      background: rgba(232,80,80,0.10);
+      border-color: var(--paper);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+    }
+    .route-btn .route-label {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 0.35em;
+      color: var(--paper);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+    }
+    .route-btn .route-sub {
+      font-size: 11px;
+      letter-spacing: 0.4em;
+      color: var(--paper-dim);
+      font-style: italic;
+    }
+    .route-btn .route-desc {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--paper-soft);
+      letter-spacing: 0.02em;
+      margin-top: 8px;
+    }
+    .route-divider {
+      display: flex;
+      align-items: center;
+      color: var(--paper-dim);
+      font-size: 14px;
+      letter-spacing: 0.3em;
+      font-style: italic;
+      padding: 0 4px;
+    }
+    @media (max-width: 720px) {
+      .route-choice { flex-direction: column; gap: 14px; }
+      .route-divider { padding: 4px 0; }
+      .route-btn { min-width: 0; width: 100%; max-width: 320px; padding: 20px 24px; }
+      .route-btn .route-label { font-size: 22px; }
+    }
+
+    /* ===== Mind route panel (mental arithmetic) ===== */
+    #mind-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    #mind-prompt {
+      font-size: clamp(15px, 1.7vw, 17px);
+      line-height: 1.85;
+      color: var(--paper-soft);
+      text-align: center;
+      letter-spacing: 0.02em;
+      max-width: 460px;
+    }
+    #mind-question {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      color: var(--paper);
+      letter-spacing: 0.08em;
+      font-family: "Courier New", monospace;
+      text-align: center;
+      padding: 24px 32px;
+      border: 1px solid rgba(216,205,184,0.22);
+      background: rgba(0,0,0,0.4);
+      min-width: 320px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+    }
+    #mind-input-display {
+      font-size: 26px;
+      font-family: "Courier New", monospace;
+      color: var(--blood-bright);
+      letter-spacing: 0.15em;
+      min-height: 1.2em;
+      text-align: center;
+      border-bottom: 1px solid rgba(216,205,184,0.3);
+      padding: 6px 0;
+      min-width: 200px;
+    }
+    #mind-input-display.empty::after {
+      content: "_";
+      animation: pulse 1.2s ease-in-out infinite;
+      color: var(--paper-dim);
+    }
+    #mind-keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+      max-width: 280px;
+    }
+    .mind-key {
+      background: rgba(20,16,12,0.6);
+      border: 1px solid rgba(216,205,184,0.2);
+      color: var(--paper);
+      padding: 16px 0;
+      font-family: "Courier New", monospace;
+      font-size: 22px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      letter-spacing: 0;
+    }
+    .mind-key:hover { background: rgba(232,80,80,0.12); border-color: var(--paper); }
+    .mind-key:active { transform: scale(0.95); }
+    .mind-key.fn { color: var(--paper-dim); font-size: 14px; letter-spacing: 0.2em; }
+    .mind-key.fn.submit { color: var(--blood-bright); border-color: rgba(232,80,80,0.5); }
+    #mind-timer {
+      font-size: 14px;
+      letter-spacing: 0.25em;
+      color: var(--paper-dim);
+    }
+    #mind-timer.danger { color: var(--blood-bright); }
+    #mind-feedback {
+      min-height: 1.4em;
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      color: var(--paper-dim);
+      font-style: italic;
+    }
+    #mind-feedback.ok { color: var(--will); }
+    #mind-feedback.err { color: var(--blood-bright); }
     .button {
       background: transparent;
       color: var(--paper);
@@ -586,13 +740,26 @@
     <div class="title-han">無望</div>
     <div class="title-act">ACT 1 ｜ 台北・大稻埕 ｜ 主題：失去</div>
     <div class="title-tagline">
-      在一切都被剝奪的年代，身體是最後的自由。
-      <span class="en">In an era where everything is stripped away, your body is the last frontier of freedom.</span>
+      在一切都被剝奪的年代，最後屬於你的，是身體，還是腦中那道默念的數字？
+      <span class="en">In an era of total dispossession — what remains yours: the body, or the silent count inside your skull?</span>
     </div>
-    <button id="start-btn" class="button danger">開 始</button>
-    <div class="title-warning">
-      本作將請求使用您的攝影機，透過姿勢偵測讓「身體成為敘事的載體」。<br>
-      影像僅在本機處理、不會上傳。<br>
+
+    <div class="route-choice">
+      <button id="start-body" class="route-btn">
+        <span class="route-label">身 體</span>
+        <span class="route-sub">BODY ROUTE</span>
+        <span class="route-desc">使用攝影機。蹲下、趴地、屏息。<br>身體記住歷史。</span>
+      </button>
+      <div class="route-divider"><span>或</span></div>
+      <button id="start-mind" class="route-btn">
+        <span class="route-label">思 考</span>
+        <span class="route-sub">MIND ROUTE</span>
+        <span class="route-desc">無需攝影機。在腦中默算。<br>數字是你最後的秘密。</span>
+      </button>
+    </div>
+
+    <div class="title-warning" id="title-warning-body">
+      身體路線將請求使用您的攝影機。影像僅在本機處理、不會上傳。<br>
       建議在能站起、有空間做深蹲與伏地動作的環境遊玩。
     </div>
   </div>
@@ -629,6 +796,31 @@
             <canvas id="cam-canvas"></canvas>
             <span class="cam-status" id="cam-status">待機</span>
           </div>
+        </div>
+      </div>
+
+      <div id="mind-wrap" class="hidden">
+        <div id="mind-panel">
+          <div id="mind-prompt"></div>
+          <div id="mind-question">—</div>
+          <div id="mind-input-display" class="empty"></div>
+          <div id="mind-keypad">
+            <button class="mind-key" data-k="1">1</button>
+            <button class="mind-key" data-k="2">2</button>
+            <button class="mind-key" data-k="3">3</button>
+            <button class="mind-key" data-k="4">4</button>
+            <button class="mind-key" data-k="5">5</button>
+            <button class="mind-key" data-k="6">6</button>
+            <button class="mind-key" data-k="7">7</button>
+            <button class="mind-key" data-k="8">8</button>
+            <button class="mind-key" data-k="9">9</button>
+            <button class="mind-key fn" data-k="clear">清</button>
+            <button class="mind-key" data-k="0">0</button>
+            <button class="mind-key fn submit" data-k="submit">送</button>
+          </div>
+          <div id="mind-timer"></div>
+          <div id="mind-feedback"></div>
+          <button class="action-skip" id="mind-skip">慈悲模式：跳過此題</button>
         </div>
       </div>
     </div>
@@ -680,6 +872,8 @@
       baselineShoulderY: null,
       // FIX: skipState as object so closures share same reference
       skipState: { skipped: false },
+      // ROUTE: "body" = MediaPipe pose detection, "mind" = mental arithmetic
+      route: "body",
     };
 
     /* =========================================================
@@ -1159,7 +1353,220 @@
     }
 
     /* ----- Action runner ----- */
+    /* =========================================================
+     * MIND ROUTE — 心算路線
+     * 對應原本 squat / prone 的動作場景。
+     * 設計理念:政治犯在獄中默背日期、判決編號、人數,
+     * 是維持「我還是我」最後的工具。
+     * ========================================================= */
+
+    // 將每個 scene 的動作型態映射成一道有歷史情境的算術題
+    function buildMindQuestion(scene) {
+      // 用 scene 的索引/類型決定題型,讓同樣的場景每次玩到的題目穩定
+      const sceneId = scene.action + "_" + (scene.target || 0) + "_" + (scene.timeoutSec || 0);
+      // 偽隨機:同一個場景拿到同一題,避免讀檔重玩感覺亂跳
+      const seed = [...sceneId].reduce((a, c) => a + c.charCodeAt(0), 0);
+      const pick = (arr) => arr[seed % arr.length];
+
+      if (scene.action === "squat") {
+        // 蹲下躲避 → 倒數年份(從某個年份連續減去戒嚴年數)
+        const banks = [
+          {
+            prompt: "巡邏的腳步聲越來越近。\n你蹲在牆角,腦中默算,不讓自己想到別的。",
+            q: "1987 − 38",  // 解嚴年份減戒嚴年數 = 1949 戒嚴開始
+            a: 1949,
+            hint: "解嚴 減去 戒嚴的長度",
+          },
+          {
+            prompt: "蹲下。屏住氣。\n你在腦中倒推日期,讓恐懼有地方去。",
+            q: "1949 + 38",  // 戒嚴開始 + 戒嚴持續 = 解嚴
+            a: 1987,
+            hint: "戒嚴開始 加上 它持續的長度",
+          },
+          {
+            prompt: "壓低身子。視線貼著地面。\n你默念一個數字,只為了維持腦袋還在轉。",
+            q: "1947 + 2",  // 二二八之後兩年戒嚴
+            a: 1949,
+            hint: "二二八 之後的兩年",
+          },
+        ];
+        return pick(banks);
+      }
+
+      if (scene.action === "prone") {
+        // 趴下不動 → 多步驟累加(模擬「不動」需要持續的注意力)
+        const banks = [
+          {
+            prompt: "趴在床下。\n你聽見皮鞋聲。你開始數:從 1947 開始,每過十年加一次。",
+            q: "1947 + 10 + 10 + 10 + 10",
+            a: 1987,
+            hint: "從二二八數到解嚴,每十年一次",
+          },
+          {
+            prompt: "貼地。不動。\n你想起那串編號:8、7、3、6。把它們加起來。",
+            q: "8 + 7 + 3 + 6",
+            a: 24,
+            hint: "四個數字相加",
+          },
+          {
+            prompt: "屏息。聽。\n判決書編號是 1952 號。它離戒嚴開始幾年?",
+            q: "1952 − 1949",
+            a: 3,
+            hint: "判決年份 減去 戒嚴開始",
+          },
+        ];
+        return pick(banks);
+      }
+
+      // 預設 fallback (其他動作型態,例如 stillness)
+      return {
+        prompt: "靜止。在心裡默念一個數字。",
+        q: "1947 + 40",
+        a: 1987,
+        hint: "二二八 加上 四十年",
+      };
+    }
+
+    async function runMindAction(scene) {
+      $("scene-text-wrap").classList.add("hidden");
+      $("choice-wrap").classList.add("hidden");
+      $("action-wrap").classList.add("hidden");
+      $("mind-wrap").classList.remove("hidden");
+
+      const question = buildMindQuestion(scene);
+      const promptEl = $("mind-prompt");
+      const qEl = $("mind-question");
+      const inputEl = $("mind-input-display");
+      const timerEl = $("mind-timer");
+      const feedbackEl = $("mind-feedback");
+      const keypad = $("mind-keypad");
+
+      promptEl.innerHTML = question.prompt.replace(/\n/g, "<br>");
+      qEl.textContent = question.q + " = ?";
+      inputEl.textContent = "";
+      inputEl.classList.add("empty");
+      feedbackEl.textContent = "";
+      feedbackEl.classList.remove("ok", "err");
+      timerEl.classList.remove("danger");
+
+      // FIX: reset shared skipState
+      state.skipState.skipped = false;
+      $("mind-skip").onclick = () => { state.skipState.skipped = true; };
+
+      let input = "";
+      let submitted = false;
+      let success = false;
+      let attempts = 0;
+      const maxAttempts = 3;
+
+      // 輸入更新
+      const updateInput = () => {
+        inputEl.textContent = input;
+        inputEl.classList.toggle("empty", input.length === 0);
+      };
+
+      // 鍵盤事件處理
+      const handleKey = (k) => {
+        if (submitted) return;
+        if (k === "clear") {
+          input = "";
+        } else if (k === "submit") {
+          if (input.length === 0) return;
+          const guess = parseInt(input, 10);
+          attempts++;
+          if (guess === question.a) {
+            submitted = true;
+            success = true;
+            feedbackEl.textContent = "正 確 · 數 字 守 住 了 你";
+            feedbackEl.classList.add("ok");
+          } else if (attempts >= maxAttempts) {
+            submitted = true;
+            success = false;
+            feedbackEl.textContent = `算 錯 了 · 答 案 是 ${question.a}`;
+            feedbackEl.classList.add("err");
+          } else {
+            feedbackEl.textContent = `不 對 · 還 剩 ${maxAttempts - attempts} 次 · ${question.hint}`;
+            feedbackEl.classList.add("err");
+            input = "";
+          }
+        } else {
+          // 數字鍵
+          if (input.length < 6) input += k;
+        }
+        updateInput();
+      };
+
+      // 綁定按鈕點擊
+      const onClick = (e) => {
+        const btn = e.target.closest(".mind-key");
+        if (!btn) return;
+        handleKey(btn.dataset.k);
+      };
+      keypad.addEventListener("click", onClick);
+
+      // 綁定實體鍵盤
+      const onKeydown = (e) => {
+        if (submitted) return;
+        if (/^[0-9]$/.test(e.key)) handleKey(e.key);
+        else if (e.key === "Enter") handleKey("submit");
+        else if (e.key === "Backspace" || e.key === "Escape") handleKey("clear");
+      };
+      window.addEventListener("keydown", onKeydown);
+
+      // 倒數計時(給 scene.timeoutSec 秒,但心算路線比身體路線多一點時間)
+      const timeLimit = (scene.timeoutSec || 20) * 1.5;  // 寬限 50%
+      const t0 = performance.now();
+      while (!submitted && !state.skipState.skipped) {
+        const elapsed = (performance.now() - t0) / 1000;
+        const remain = Math.max(0, timeLimit - elapsed);
+        timerEl.textContent = `剩 餘 ${Math.ceil(remain)} 秒`;
+        if (remain <= 5) timerEl.classList.add("danger");
+        if (remain <= 0) {
+          submitted = true;
+          success = false;
+          feedbackEl.textContent = `時 間 到 · 答 案 是 ${question.a}`;
+          feedbackEl.classList.add("err");
+          break;
+        }
+        await sleep(200);
+      }
+
+      // 解綁
+      keypad.removeEventListener("click", onClick);
+      window.removeEventListener("keydown", onKeydown);
+
+      // 短暫停留讓玩家看到結果
+      await sleep(1400);
+
+      // 處理慈悲模式跳過
+      if (state.skipState.skipped && !success) {
+        applyEffects({ FEAR: +4 });
+        $("scene-text-wrap").classList.remove("hidden");
+        $("mind-wrap").classList.add("hidden");
+        await typeLine({ text: "（你選擇不算了。腦中那條繩子鬆開,你開始忘記今天是幾號。）" });
+        await waitForAdvance();
+        return;
+      }
+
+      applyEffects(success ? (scene.success || {}) : (scene.fail || {}));
+
+      $("scene-text-wrap").classList.remove("hidden");
+      $("mind-wrap").classList.add("hidden");
+      const lines = success ? scene.afterSuccess : scene.afterFail;
+      for (const line of lines) {
+        if (line.fx === "fadeBlack") { await fadeBlack(); continue; }
+        if (line.fx === "shake") { await shakeScreen(); continue; }
+        await typeLine(line);
+        await waitForAdvance();
+      }
+    }
+
     async function runAction(scene) {
+      // ROUTE FORK: mind route uses arithmetic instead of pose detection
+      if (state.route === "mind") {
+        return await runMindAction(scene);
+      }
+
       $("scene-text-wrap").classList.add("hidden");
       $("choice-wrap").classList.add("hidden");
       $("action-wrap").classList.remove("hidden");
@@ -1411,13 +1818,16 @@
     /* =========================================================
      * BOOT
      * ========================================================= */
-    $("start-btn").addEventListener("click", async () => {
+    async function startGame(route) {
+      state.route = route;
       $("title-screen").classList.add("hidden");
       $("game-screen").classList.remove("hidden");
       updateHUD();
       await fadeBlack();
       await runScenes();
-    });
+    }
+    $("start-body").addEventListener("click", () => startGame("body"));
+    $("start-mind").addEventListener("click", () => startGame("mind"));
   </script>
 </body>
 </html>
