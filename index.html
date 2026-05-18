@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BÔ BÂNG 無望 | 台灣白色恐怖敘事遊戲 | 用身體感受歷史 | 免費試玩</title>
-  <meta name="description" content="台北，1952年，白色恐怖最深的年代。一個人消失了。你的攝影機會偵測你的姿勢——蹲下、趴地、靜止不動。身體是最後還屬於你的東西。敘事冒險遊戲 Act 1 Prototype，免費試玩。" />
+  <meta name="description" content="台北,1947年,白色恐怖最深的年代。一個人消失了。你的攝影機會偵測你的姿勢——蹲下、趴地、靜止不動。身體是最後還屬於你的東西。敘事冒險遊戲 Act 1 Prototype,免費試玩。" />
   <link rel="canonical" href="https://kevin-1688.github.io/bobang/" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://kevin-1688.github.io/bobang/" />
   <meta property="og:title" content="BÔ BÂNG 無望 | 台灣白色恐怖敘事遊戲 | 用身體感受歷史 | 免費試玩" />
-  <meta property="og:description" content="台北，1952年，白色恐怖最深的年代。一個人消失了。你的攝影機偵測你的姿勢——身體是最後還屬於你的東西。Act 1 Prototype 免費試玩。" />
+  <meta property="og:description" content="台北,1947年,白色恐怖最深的年代。一個人消失了。你的攝影機偵測你的姿勢——身體是最後還屬於你的東西。Act 1 Prototype 免費試玩。" />
   <meta property="og:image" content="https://kevin-1688.github.io/bobang/bobang-og-cover.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="zh_TW" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="BÔ BÂNG 無望 | 台灣白色恐怖敘事遊戲" />
-  <meta name="twitter:description" content="台北，1952年，白色恐怖最深的年代。在一切都被剝奪的年代，身體是最後的自由。" />
+  <meta name="twitter:description" content="台北,1947年,白色恐怖最深的年代。在一切都被剝奪的年代,身體是最後的自由。" />
   <meta name="twitter:image" content="https://kevin-1688.github.io/bobang/bobang-og-cover.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,13 +24,13 @@
   <style>
     :root {
       --ink: #0a0907;
-      --paper: #e6dcc6;
-      --paper-dim: #a89e89;
-      --paper-soft: #d8cdb8;
+      --paper: #ece2cc;
+      --paper-dim: #b8aea0;
+      --paper-soft: #ddd2bd;
       --blood: #6b1818;
-      --blood-bright: #c93434;
-      --silence: #5a7064;
-      --will: #a89572;
+      --blood-bright: #e85050;
+      --silence: #6a8074;
+      --will: #b8a582;
       --vignette: 0;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,6 +42,9 @@
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
     body {
       background:
@@ -105,7 +108,10 @@
       font-weight: 900;
       letter-spacing: 0.35em;
       color: var(--paper);
-      text-shadow: 0 0 30px rgba(165,40,40,0.2), 0 2px 8px rgba(0,0,0,0.6);
+      text-shadow:
+        0 0 30px rgba(232,80,80,0.18),
+        0 1px 2px rgba(0,0,0,0.9),
+        0 0 1px rgba(0,0,0,0.9);
       margin-left: 0.35em;
     }
     .title-romaji {
@@ -122,28 +128,29 @@
     }
     .title-tagline {
       font-style: italic;
-      color: var(--paper-soft);
+      color: var(--paper);
       max-width: 560px;
       line-height: 1.85;
       font-size: clamp(15px, 1.6vw, 18px);
       margin: 4vh 0;
-      text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.9);
     }
     .title-tagline .en {
       display: block;
       margin-top: 0.8em;
       font-family: "Noto Serif TC", serif;
-      color: rgba(216,205,184,0.65);
+      color: var(--paper-dim);
       font-size: 0.82em;
       letter-spacing: 0.02em;
     }
     .title-warning {
       font-size: 13px;
-      color: rgba(216,205,184,0.6);
+      color: var(--paper-dim);
       max-width: 420px;
       line-height: 1.75;
       margin-top: 2vh;
       letter-spacing: 0.02em;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
     }
     .button {
       background: transparent;
@@ -201,7 +208,9 @@
       letter-spacing: 0.03em;
       color: var(--paper);
       min-height: 4em;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.55);
+      text-shadow:
+        0 1px 2px rgba(0,0,0,0.9),
+        0 0 1px rgba(0,0,0,0.8);
     }
     .scene-narration.dialogue {
       font-style: normal;
@@ -210,13 +219,13 @@
     }
     .scene-narration.dialogue .speaker {
       color: var(--blood-bright);
-      opacity: 0.85;
+      opacity: 1;
     }
     .scene-narration .speaker {
       display: block;
       font-size: 0.62em;
       letter-spacing: 0.4em;
-      color: var(--paper-dim);
+      color: var(--paper-soft);
       margin-bottom: 0.8em;
       font-style: normal;
       font-weight: 400;
@@ -225,7 +234,7 @@
       margin-top: 4vh;
       font-size: 13px;
       letter-spacing: 0.35em;
-      color: rgba(216,205,184,0.55);
+      color: var(--paper-dim);
       animation: pulse 2s ease-in-out infinite;
     }
     @keyframes pulse {
@@ -262,10 +271,9 @@
       display: block;
       font-size: 11px;
       letter-spacing: 0.32em;
-      color: var(--paper-soft);
+      color: var(--paper-dim);
       margin-bottom: 8px;
       font-style: italic;
-      opacity: 0.85;
     }
 
     #action-panel {
@@ -338,22 +346,22 @@
       top: 6px; left: 8px;
       font-size: 10px;
       letter-spacing: 0.3em;
-      color: rgba(216,205,184,0.6);
-      text-shadow: 0 0 4px black;
+      color: var(--paper-soft);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.95);
     }
     #camera-box .cam-status {
       position: absolute;
       bottom: 6px; right: 8px;
       font-size: 10px;
       letter-spacing: 0.2em;
-      color: rgba(216,205,184,0.7);
-      text-shadow: 0 0 4px black;
+      color: var(--paper-soft);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.95);
     }
     .action-skip {
       margin-top: 16px;
       background: transparent;
-      border: 1px dashed rgba(216,205,184,0.25);
-      color: rgba(216,205,184,0.5);
+      border: 1px dashed rgba(216,205,184,0.35);
+      color: var(--paper-dim);
       padding: 8px 14px;
       font-family: inherit;
       font-size: 11px;
@@ -361,7 +369,7 @@
       cursor: pointer;
       align-self: flex-start;
     }
-    .action-skip:hover { color: var(--paper); border-color: var(--paper-dim); }
+    .action-skip:hover { color: var(--paper); border-color: var(--paper); }
 
     #hud {
       padding: 12px 28px;
@@ -447,6 +455,60 @@
       line-height: 1;
     }
 
+    /* ===== Orientation Prompt (mobile only) ===== */
+    #orient-prompt {
+      position: fixed; inset: 0;
+      background: rgba(10,9,7,0.96);
+      z-index: 250;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 28px;
+      padding: 5vh 6vw;
+      text-align: center;
+    }
+    #orient-prompt h2 {
+      font-size: 22px;
+      letter-spacing: 0.25em;
+      font-weight: 700;
+      color: var(--paper);
+    }
+    #orient-prompt p {
+      max-width: 420px;
+      line-height: 1.85;
+      font-size: 15px;
+      color: var(--paper-soft);
+      letter-spacing: 0.02em;
+    }
+    #orient-prompt .orient-icon {
+      width: 120px;
+      height: 80px;
+      border: 3px solid var(--paper);
+      border-radius: 12px;
+      position: relative;
+      animation: rotate-hint 2.4s ease-in-out infinite;
+      box-shadow: 0 0 24px rgba(232,80,80,0.15);
+    }
+    #orient-prompt .orient-icon::before {
+      content: "";
+      position: absolute;
+      top: 50%; left: 8px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--paper-dim);
+      transform: translateY(-50%);
+    }
+    @keyframes rotate-hint {
+      0%, 20%   { transform: rotate(90deg); }
+      50%, 70%  { transform: rotate(0deg); }
+      100%     { transform: rotate(90deg); }
+    }
+    #orient-prompt .orient-sub {
+      font-size: 12px;
+      color: var(--paper-dim);
+      letter-spacing: 0.2em;
+      margin-top: -8px;
+    }
+
     .ending-stats {
       display: flex; flex-direction: column;
       gap: 12px;
@@ -469,7 +531,7 @@
       font-size: 18px;
       color: var(--paper);
       margin: 3vh 0;
-      text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.9);
     }
     .ending-name {
       font-size: 32px;
@@ -477,7 +539,10 @@
       letter-spacing: 0.35em;
       color: var(--blood-bright);
       margin: 2vh 0;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+      text-shadow:
+        0 0 18px rgba(232,80,80,0.25),
+        0 1px 3px rgba(0,0,0,0.95),
+        0 0 1px rgba(0,0,0,0.9);
     }
     .ending-bracket {
       font-size: 13px;
@@ -536,7 +601,7 @@
   <div id="game-screen" class="screen hidden">
     <div id="chapter-bar">
       <div class="ch-name" id="ch-name">第 一 幕 ｜ 台 北</div>
-      <div class="ch-meta" id="ch-meta">大稻埕 · 1952</div>
+      <div class="ch-meta" id="ch-meta">大稻埕 · 1947</div>
     </div>
 
     <div id="scene-stage">
@@ -587,6 +652,14 @@
     <button class="button" id="calib-start">準備好了</button>
   </div>
 
+  <!-- ORIENTATION PROMPT (mobile portrait only) -->
+  <div id="orient-prompt" class="hidden">
+    <div class="orient-icon"></div>
+    <h2>請 將 手 機 橫 放</h2>
+    <p>接下來需要攝影機偵測你的全身姿勢。<br>將手機橫放有助於完整入鏡,身體會成為敘事的一部分。</p>
+    <div class="orient-sub">ROTATE YOUR DEVICE</div>
+  </div>
+
   <div id="black-flash"></div>
 
   <script type="module">
@@ -614,7 +687,7 @@
      * ========================================================= */
     const SCENES = [
       // -------- Scene 1: 一個夜的失蹤 --------
-      { type: "cinematic", chapter: { name: "第 一 幕 · 場景 一", meta: "失 蹤 · 1952" },
+      { type: "cinematic", chapter: { name: "第 一 幕 · 場景 一", meta: "失 蹤 · 1947" },
         lines: [
           { text: "街燈昏暗。" },
           { text: "小美站在街口。" },
@@ -644,19 +717,19 @@
         choices: [
           { tag: "沈 默", text: "默默點頭。", effects: { SILENCE: +6 },
             after: [
-              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天香茶行旁。我會留下訊息。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天馬茶行旁。我會留下訊息。」", dialogue: true },
             ]
           },
           { tag: "謊 言", text: "「她是誰？我不認識什麼小美。」", effects: { SILENCE: +12, FEAR: +6 },
             after: [
               { text: "他盯著你看了很久。" },
-              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天香茶行旁。如果你真的想知道。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天馬茶行旁。如果你真的想知道。」", dialogue: true },
             ]
           },
           { tag: "暴 露", text: "「她是我未婚妻！告訴我她在哪裡！」", effects: { SILENCE: -8, FEAR: +18 },
             after: [
               { text: "他猛地拉住你的衣領，把你壓進牆角。" },
-              { speaker: "陌 生 男 子", text: "「你想被聽見嗎？小聲一點。明天。大稻埕。天香茶行旁。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「你想被聽見嗎？小聲一點。明天。大稻埕。天馬茶行旁。」", dialogue: true },
               { text: "你的手在發抖。" },
             ]
           },
@@ -967,8 +1040,46 @@
       }
     }
 
+    /* ----- Mobile orientation prompt -----
+     * Show only on touch devices in portrait orientation.
+     * Resolves when the user rotates to landscape, or after a brief
+     * grace period if they don't rotate (we don't block desktop or
+     * users who insist on portrait).
+     */
+    function isLikelyMobile() {
+      // coarse pointer = touch device; narrow side detection too
+      const coarse = window.matchMedia("(pointer: coarse)").matches;
+      const narrow = Math.min(window.innerWidth, window.innerHeight) < 600;
+      return coarse && narrow;
+    }
+    function isPortrait() {
+      return window.innerHeight > window.innerWidth;
+    }
+    async function promptLandscapeIfMobile() {
+      if (!isLikelyMobile() || !isPortrait()) return;
+      const prompt = $("orient-prompt");
+      prompt.classList.remove("hidden");
+      await new Promise(resolve => {
+        const onChange = () => {
+          if (!isPortrait()) {
+            cleanup();
+            // small delay so layout settles before camera starts
+            setTimeout(resolve, 350);
+          }
+        };
+        const cleanup = () => {
+          window.removeEventListener("resize", onChange);
+          window.removeEventListener("orientationchange", onChange);
+          prompt.classList.add("hidden");
+        };
+        window.addEventListener("resize", onChange);
+        window.addEventListener("orientationchange", onChange);
+      });
+    }
+
     /* ----- Calibration ----- */
     async function calibrate() {
+      await promptLandscapeIfMobile();
       const calib = $("calibration");
       const video = $("calib-video");
       const errBox = $("calib-error");
