@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BǑ-BĀNG 無望 | 台灣百年沈浸式體驗遊戲 | 用身體感受歷史 | 免費試玩</title>
-  <meta name="description" content="台北，1947年，台灣歷史最黑暗的年代。一個人消失了。你的攝影機會偵測你的姿勢——蹲下、趴地、靜止不動。身體是最後還屬於你的東西。敘事冒險遊戲 Act 1 Prototype，免費試玩。" />
+  <title>BÔ BÂNG 無望 | 台灣白色恐怖敘事遊戲 | 用身體感受歷史 | 免費試玩</title>
+  <meta name="description" content="台北，1952年，白色恐怖最深的年代。一個人消失了。你的攝影機會偵測你的姿勢——蹲下、趴地、靜止不動。身體是最後還屬於你的東西。敘事冒險遊戲 Act 1 Prototype，免費試玩。" />
   <link rel="canonical" href="https://kevin-1688.github.io/bobang/" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://kevin-1688.github.io/bobang/" />
-  <meta property="og:title" content="BǑ-BĀNG 無望 | 台灣百年沈浸式體驗遊戲 | 用身體感受歷史 | 免費試玩" />
-  <meta property="og:description" content="台北，1947年，台灣歷史上最黑暗的年代。一個人消失了。你的攝影機偵測你的姿勢——身體是最後還屬於你的東西。Act 1 Prototype 免費試玩。" />
+  <meta property="og:title" content="BÔ BÂNG 無望 | 台灣白色恐怖敘事遊戲 | 用身體感受歷史 | 免費試玩" />
+  <meta property="og:description" content="台北，1952年，白色恐怖最深的年代。一個人消失了。你的攝影機偵測你的姿勢——身體是最後還屬於你的東西。Act 1 Prototype 免費試玩。" />
   <meta property="og:image" content="https://kevin-1688.github.io/bobang/bobang-og-cover.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="zh_TW" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="BǑ-BĀNG 無望 | 台灣百年沈浸式體驗遊戲" />
-  <meta name="twitter:description" content="台北，1947年，台灣歷史上最黑暗的年代。在一切都被剝奪的年代，身體是最後的自由。" />
+  <meta name="twitter:title" content="BÔ BÂNG 無望 | 台灣白色恐怖敘事遊戲" />
+  <meta name="twitter:description" content="台北，1952年，白色恐怖最深的年代。在一切都被剝奪的年代，身體是最後的自由。" />
   <meta name="twitter:image" content="https://kevin-1688.github.io/bobang/bobang-og-cover.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,12 +24,13 @@
   <style>
     :root {
       --ink: #0a0907;
-      --paper: #d8cdb8;
-      --paper-dim: #9a907d;
+      --paper: #e6dcc6;
+      --paper-dim: #a89e89;
+      --paper-soft: #d8cdb8;
       --blood: #6b1818;
-      --blood-bright: #a52828;
-      --silence: #4a5d52;
-      --will: #8a7d5e;
+      --blood-bright: #c93434;
+      --silence: #5a7064;
+      --will: #a89572;
       --vignette: 0;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,11 +52,11 @@
       content: "";
       position: fixed; inset: 0;
       background-image:
-        repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
       mix-blend-mode: overlay;
       pointer-events: none;
       z-index: 200;
-      opacity: 0.4;
+      opacity: 0.25;
     }
     body::after {
       content: "";
@@ -102,52 +103,56 @@
     .title-han {
       font-size: clamp(56px, 14vw, 180px);
       font-weight: 900;
-      letter-spacing: 0.4em;
+      letter-spacing: 0.35em;
       color: var(--paper);
-      text-shadow: 0 0 30px rgba(165,40,40,0.2);
-      margin-left: 0.4em;
+      text-shadow: 0 0 30px rgba(165,40,40,0.2), 0 2px 8px rgba(0,0,0,0.6);
+      margin-left: 0.35em;
     }
     .title-romaji {
-      font-size: clamp(14px, 2.2vw, 22px);
-      letter-spacing: 0.6em;
-      color: var(--paper-dim);
+      font-size: clamp(15px, 2.2vw, 22px);
+      letter-spacing: 0.5em;
+      color: var(--paper-soft);
       margin-bottom: 2vh;
+      font-weight: 400;
     }
     .title-act {
       font-size: clamp(14px, 1.8vw, 18px);
-      letter-spacing: 0.4em;
-      color: var(--paper-dim);
+      letter-spacing: 0.35em;
+      color: var(--paper-soft);
     }
     .title-tagline {
       font-style: italic;
-      color: var(--paper-dim);
-      max-width: 520px;
-      line-height: 1.9;
-      font-size: clamp(13px, 1.5vw, 17px);
+      color: var(--paper-soft);
+      max-width: 560px;
+      line-height: 1.85;
+      font-size: clamp(15px, 1.6vw, 18px);
       margin: 4vh 0;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.5);
     }
     .title-tagline .en {
       display: block;
-      margin-top: 0.6em;
+      margin-top: 0.8em;
       font-family: "Noto Serif TC", serif;
-      color: rgba(216,205,184,0.4);
-      font-size: 0.85em;
+      color: rgba(216,205,184,0.65);
+      font-size: 0.82em;
+      letter-spacing: 0.02em;
     }
     .title-warning {
-      font-size: 12px;
-      color: rgba(216,205,184,0.4);
-      max-width: 380px;
-      line-height: 1.7;
+      font-size: 13px;
+      color: rgba(216,205,184,0.6);
+      max-width: 420px;
+      line-height: 1.75;
       margin-top: 2vh;
+      letter-spacing: 0.02em;
     }
     .button {
       background: transparent;
       color: var(--paper);
-      border: 1px solid var(--paper-dim);
+      border: 1px solid var(--paper-soft);
       padding: 14px 36px;
       font-family: inherit;
       font-size: 15px;
-      letter-spacing: 0.4em;
+      letter-spacing: 0.35em;
       cursor: pointer;
       transition: all 0.4s ease;
       margin-top: 2vh;
@@ -155,9 +160,9 @@
     .button:hover {
       background: var(--paper);
       color: var(--ink);
-      letter-spacing: 0.6em;
+      letter-spacing: 0.5em;
     }
-    .button.danger { border-color: rgba(165,40,40,0.5); color: rgba(216,205,184,0.85); }
+    .button.danger { border-color: rgba(201,52,52,0.55); color: var(--paper); }
     .button.danger:hover { background: var(--blood); color: var(--paper); border-color: var(--blood); }
 
     #game-screen {
@@ -170,13 +175,13 @@
       padding: 16px 28px;
       border-bottom: 1px solid rgba(216,205,184,0.12);
       display: flex; justify-content: space-between; align-items: center;
-      font-size: 12px;
-      letter-spacing: 0.3em;
-      color: var(--paper-dim);
+      font-size: 13px;
+      letter-spacing: 0.22em;
+      color: var(--paper-soft);
       background: rgba(0,0,0,0.3);
     }
-    #chapter-bar .ch-name { font-weight: 700; }
-    #chapter-bar .ch-meta { font-style: italic; opacity: 0.7; }
+    #chapter-bar .ch-name { font-weight: 700; color: var(--paper); }
+    #chapter-bar .ch-meta { font-style: italic; opacity: 0.75; letter-spacing: 0.15em; }
 
     #scene-stage {
       flex: 1;
@@ -191,26 +196,36 @@
       text-align: center;
     }
     .scene-narration {
-      font-size: clamp(18px, 2.4vw, 28px);
-      line-height: 2;
-      letter-spacing: 0.08em;
+      font-size: clamp(19px, 2.3vw, 27px);
+      line-height: 1.85;
+      letter-spacing: 0.03em;
       color: var(--paper);
       min-height: 4em;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.55);
     }
-    .scene-narration.dialogue { font-style: italic; color: #e8dec7; }
+    .scene-narration.dialogue {
+      font-style: normal;
+      color: #f0e6d0;
+      font-weight: 400;
+    }
+    .scene-narration.dialogue .speaker {
+      color: var(--blood-bright);
+      opacity: 0.85;
+    }
     .scene-narration .speaker {
       display: block;
-      font-size: 0.7em;
-      letter-spacing: 0.5em;
+      font-size: 0.62em;
+      letter-spacing: 0.4em;
       color: var(--paper-dim);
-      margin-bottom: 0.6em;
+      margin-bottom: 0.8em;
       font-style: normal;
+      font-weight: 400;
     }
     .scene-prompt {
       margin-top: 4vh;
       font-size: 13px;
-      letter-spacing: 0.4em;
-      color: rgba(216,205,184,0.45);
+      letter-spacing: 0.35em;
+      color: rgba(216,205,184,0.55);
       animation: pulse 2s ease-in-out infinite;
     }
     @keyframes pulse {
@@ -226,30 +241,31 @@
       width: 100%;
     }
     .choice-btn {
-      background: rgba(20,16,12,0.6);
-      border: 1px solid rgba(216,205,184,0.2);
+      background: rgba(20,16,12,0.7);
+      border: 1px solid rgba(216,205,184,0.22);
       color: var(--paper);
       padding: 18px 24px;
       font-family: inherit;
       font-size: 16px;
-      line-height: 1.7;
+      line-height: 1.65;
       text-align: left;
       cursor: pointer;
       transition: all 0.3s ease;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
     }
     .choice-btn:hover {
-      background: rgba(165,40,40,0.12);
+      background: rgba(165,40,40,0.14);
       border-color: var(--paper);
       transform: translateX(4px);
     }
     .choice-btn .tag {
       display: block;
       font-size: 11px;
-      letter-spacing: 0.3em;
-      color: var(--paper-dim);
-      margin-bottom: 6px;
+      letter-spacing: 0.32em;
+      color: var(--paper-soft);
+      margin-bottom: 8px;
       font-style: italic;
+      opacity: 0.85;
     }
 
     #action-panel {
@@ -266,15 +282,17 @@
       gap: 16px;
     }
     .action-instruction {
-      font-size: 22px;
-      line-height: 1.8;
+      font-size: 23px;
+      line-height: 1.6;
       color: var(--paper);
+      font-weight: 700;
+      letter-spacing: 0.05em;
     }
     .action-detail {
-      font-size: 14px;
-      color: var(--paper-dim);
-      line-height: 1.8;
-      letter-spacing: 0.05em;
+      font-size: 15px;
+      color: var(--paper-soft);
+      line-height: 1.75;
+      letter-spacing: 0.02em;
     }
     .action-counter {
       font-size: 64px;
@@ -291,8 +309,8 @@
     }
     .action-timer {
       font-size: 14px;
-      color: var(--paper-dim);
-      letter-spacing: 0.3em;
+      color: var(--paper-soft);
+      letter-spacing: 0.25em;
     }
     .action-timer.danger { color: var(--blood-bright); animation: pulse 0.4s ease-in-out infinite; }
 
@@ -353,9 +371,9 @@
       justify-content: center;
       align-items: center;
       background: rgba(0,0,0,0.4);
-      font-size: 11px;
-      letter-spacing: 0.25em;
-      color: var(--paper-dim);
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      color: var(--paper-soft);
     }
     .meter {
       display: flex; align-items: center; gap: 10px;
@@ -399,16 +417,17 @@
       padding: 5vh 5vw;
     }
     #calibration h2 {
-      font-size: 22px;
-      letter-spacing: 0.3em;
+      font-size: 23px;
+      letter-spacing: 0.25em;
       font-weight: 700;
       color: var(--paper);
     }
     #calibration p {
-      max-width: 460px;
-      line-height: 2;
-      font-size: 15px;
-      color: var(--paper-dim);
+      max-width: 480px;
+      line-height: 1.85;
+      font-size: 16px;
+      color: var(--paper-soft);
+      letter-spacing: 0.02em;
     }
     #calibration .calib-cam {
       width: 280px; aspect-ratio: 4/3;
@@ -437,31 +456,33 @@
     }
     .ending-row {
       display: flex; justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px dashed rgba(216,205,184,0.15);
-      letter-spacing: 0.3em;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(216,205,184,0.18);
+      letter-spacing: 0.2em;
       font-size: 14px;
     }
-    .ending-row .v { color: var(--paper); font-family: "Courier New", monospace; }
+    .ending-row .v { color: var(--paper); font-family: "Courier New", monospace; letter-spacing: 0.05em; }
     .ending-quote {
-      max-width: 560px;
+      max-width: 580px;
       font-style: italic;
-      line-height: 2;
-      font-size: 17px;
+      line-height: 1.9;
+      font-size: 18px;
       color: var(--paper);
       margin: 3vh 0;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.5);
     }
     .ending-name {
       font-size: 32px;
       font-weight: 900;
-      letter-spacing: 0.4em;
+      letter-spacing: 0.35em;
       color: var(--blood-bright);
       margin: 2vh 0;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.7);
     }
     .ending-bracket {
-      font-size: 12px;
-      letter-spacing: 0.4em;
-      color: var(--paper-dim);
+      font-size: 13px;
+      letter-spacing: 0.32em;
+      color: var(--paper-soft);
     }
 
     .error-msg {
@@ -483,16 +504,20 @@
     @media (max-width: 720px) {
       #action-panel { flex-direction: column; align-items: center; }
       #camera-box { width: 100%; max-width: 320px; }
-      .scene-narration { font-size: 18px; line-height: 1.9; }
-      #hud { gap: 12px; padding: 10px 12px; flex-wrap: wrap; }
+      .scene-narration { font-size: 18px; line-height: 1.8; letter-spacing: 0.02em; }
+      .action-instruction { font-size: 20px; }
+      .action-detail { font-size: 14px; }
+      #hud { gap: 12px; padding: 10px 12px; flex-wrap: wrap; font-size: 11px; letter-spacing: 0.12em; }
       .meter .bar { width: 60px; }
+      #chapter-bar { font-size: 12px; padding: 12px 18px; }
+      .choice-btn { font-size: 15px; padding: 16px 20px; }
     }
   </style>
 </head>
 <body>
   <!-- TITLE SCREEN -->
   <div id="title-screen" class="screen">
-    <div class="title-romaji">BÚ — BĀNG</div>
+    <div class="title-romaji">BÔ &nbsp;BÂNG</div>
     <div class="title-han">無望</div>
     <div class="title-act">ACT 1 ｜ 台北・大稻埕 ｜ 主題：失去</div>
     <div class="title-tagline">
@@ -511,7 +536,7 @@
   <div id="game-screen" class="screen hidden">
     <div id="chapter-bar">
       <div class="ch-name" id="ch-name">第 一 幕 ｜ 台 北</div>
-      <div class="ch-meta" id="ch-meta">大稻埕 · 1947</div>
+      <div class="ch-meta" id="ch-meta">大稻埕 · 1952</div>
     </div>
 
     <div id="scene-stage">
@@ -619,19 +644,19 @@
         choices: [
           { tag: "沈 默", text: "默默點頭。", effects: { SILENCE: +6 },
             after: [
-              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天馬茶行旁。我會留下訊息。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天香茶行旁。我會留下訊息。」", dialogue: true },
             ]
           },
           { tag: "謊 言", text: "「她是誰？我不認識什麼小美。」", effects: { SILENCE: +12, FEAR: +6 },
             after: [
               { text: "他盯著你看了很久。" },
-              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天馬茶行旁。如果你真的想知道。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「明天。大稻埕。天香茶行旁。如果你真的想知道。」", dialogue: true },
             ]
           },
           { tag: "暴 露", text: "「她是我未婚妻！告訴我她在哪裡！」", effects: { SILENCE: -8, FEAR: +18 },
             after: [
               { text: "他猛地拉住你的衣領，把你壓進牆角。" },
-              { speaker: "陌 生 男 子", text: "「你想被聽見嗎？小聲一點。明天。大稻埕。天馬茶行旁。」", dialogue: true },
+              { speaker: "陌 生 男 子", text: "「你想被聽見嗎？小聲一點。明天。大稻埕。天香茶行旁。」", dialogue: true },
               { text: "你的手在發抖。" },
             ]
           },
@@ -639,7 +664,7 @@
       },
       { type: "cinematic",
         lines: [
-          { text: "遠處突然傳來查緝隊的腳步聲。" },
+          { text: "遠處突然傳來查緝隊的火把聲。" },
           { text: "你看見幾個官僚正在收錢。" },
           { speaker: "心 中 一 句", text: "「這城市沒有乾淨的地方。」", dialogue: true },
           { fx: "fadeBlack" },
